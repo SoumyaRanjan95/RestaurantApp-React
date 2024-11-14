@@ -1,0 +1,757 @@
+/*Root setting*/
+#root{
+  --bg-color: rgb(234, 225, 219);
+  --bg-color-darker: rgb(244, 197, 166);
+  --dark-mode-bg: rgb(32, 30, 30);  
+  
+}
+
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.navbar{
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  width: 100%;
+  height: 10vh;
+  padding: 0 50px 0 50px;
+  border-bottom: 1px solid chocolate;
+  margin-right: 150px;
+
+}
+
+
+
+.navleft{
+  display: flex;
+  flex-direction:row;
+  
+}
+
+.navleft > a{
+  margin: 10px;
+}
+
+.navright{
+  background-color:  var(--bg-color);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 150px;
+}
+
+
+/*------------------- breadcrumb -----------------------*/
+#breadcrumb{
+  font-size: 30px;
+  background-color: var(--bg-color-darker);
+  width: 40px;
+  height:40px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 0 5px 0 5px;
+  cursor: pointer;
+
+}
+
+/*-----------------Search Bar--------------------*/
+
+.searchbar{
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px 0 5px;
+  background-color: var(--bg-color-darker);
+  border-radius: 5px;
+  height:40px;
+  padding: 5px;
+  cursor: pointer;
+
+
+ }
+ .searchbar > i{
+  margin: 0 5px 0 5px;
+ }
+ .searchbar-restname{
+  width: 120px;
+ }
+ /*Dropdown*/
+ .dropdown{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  max-height: 450px;
+  padding: 10px;
+  border-radius: 7px;
+  margin-top: 15px;
+  visibility: visible;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  top: 50px;
+  z-index: 1;
+  background-color: white;
+ }
+ .dropdown-open{
+  visibility: visible;
+ }
+
+
+.dropdown-search{
+  width:100%;
+  margin: 5px 0 5px 0;
+  margin-right:5px ;
+  border-radius: 3px;
+  border: none;
+  outline: none;
+
+  
+}
+ .dropdown-restaurant-list{
+  width: 100%;
+  margin: 5px 0 5px 0;
+  overflow-y: scroll;
+  overflow-x: none;
+
+ }
+ .resturants{
+  width: 100%;
+  height: 35px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 15px;
+  border-radius: 3px;
+ }
+ .resturants:hover{
+  background-color:var(--bg-color);
+ }
+
+/*-----------------USer Login --------------------*/
+
+.userLogin{
+  background-color: var(--bg-color-darker);
+  width: 40px;
+  height:40px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px 5px 5px 5px;
+  cursor: pointer;
+ }
+
+ .userLogin >a{
+font-size: 30px; }
+
+ /*Login Modal*/
+ .modalBackground{
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background-color: rgba(0,0,0,0.6);
+  position: fixed;
+  visibility: hidden;
+ }
+ .LoginModal{
+  position: fixed;
+  background-color: var(--bg-color);
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  border-radius: 10px;
+
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+ }
+
+.LoginModal-top{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-color);
+  margin-bottom: 10px;
+
+}
+.LoginModal-mid{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: var(--bg-color);
+
+}
+
+.LoginModal-mid > p{
+  background-color: var(--bg-color);
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.LoginModal-mid > input{
+  width: 100%;
+  height: 45px;
+  border-radius: 8px;
+  border: none;
+  margin: 5px 0 5px 0;
+  outline: none;
+  padding-left: 5px;
+  text-indent: 10px;
+
+}
+
+.LoginModal-mid > input[type="submit"]{
+background-color: var(--bg-color-darker);
+}
+
+.LoginModal-bottom{
+  width: 100%;
+  background-color: var(--bg-color);
+}
+.LoginModal-bottom > p{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--bg-color);
+}
+
+/*----------------Cart ------------------------*/
+.cart{
+  background-color: var(--bg-color-darker);
+  width: 40px;
+  height:40px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px 5px 5px 5px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.reservations-background{
+  width: 100vw;
+  height: 100vh;
+  visibility: hidden;
+  position: fixed;
+  background-color: rgba(0,0,0,0.6);
+  top:0;
+  left:0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.reservations{
+  width: 80vw;
+  height: 800vh;
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.reservation-list-item{
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  padding: 10px;
+  overflow-y: scroll;
+}
+.reservation-list-item > p{
+  margin: 10px;
+  padding: 10px;
+}
+
+/*---------------------------Side Panel----------------------------*/
+.sidepanel-background{
+  width: 100vw;
+  height: 100vh;
+  visibility: hidden;
+  position: fixed;
+  background-color: rgba(0,0,0,0.6);
+  top:0;
+  left:0;
+  
+}
+.sidepanel{
+  background-color: whitesmoke ;
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  z-index: 1;
+  height: 100vh;
+  width: 40vw;
+  overflow-y: scroll;
+  padding: 20px;
+  right:0;
+  top:0;
+  transition: width 0.4s ease-in;
+}
+.sidepanel-head{
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+#sidepanel-head-clsbtn{
+  background-color: whitesmoke;
+  font-size: 50px;
+  color: black;
+  cursor: pointer;
+  
+}
+.sidepanel-body{
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  align-items:start;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.sidepanel-body-container{
+background-color: whitesmoke;
+  margin: 20px 0 20px 0;
+}
+
+.sidepanel-body-container > h3{
+  margin-bottom: 20px;
+}
+
+.sidepanel-body-options{
+  display: grid;
+  grid-template-columns: 250px 250px;
+}
+
+
+.sidepanel-body-options > p{
+  background-color: none;
+  text-align: start;
+
+}
+
+/*----------------------------Footer-----------------------------------*/
+.Footer{
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  padding: 70px;
+}
+
+.Footer-top{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--bg-color);
+  width: 100%;
+  margin: 20px 0 20px 0;;
+}
+.Footer-top-logo{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: var(--bg-color);
+
+}
+
+
+.Footer-mid{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin: 20px 0 20px 0;;
+
+}
+
+.Footer-mid-card{
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+  width: 30%;
+}
+.Footer-mid-card-items{
+  display: grid;
+  grid-template-columns: auto auto;
+  margin: 40px 0 10px 0;
+}
+.Footer-bottom{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-color);
+  width: 100%;
+  margin: 20px 0 20px 0;;
+
+}
+.footer-bottom-right{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+
+/*--------------------- Home -----------------------*/
+
+.Home{
+  background-color: var(--bg-color);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 200px;
+}
+
+.search-resturants{
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 50vw;
+  height: 30%;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.search-resturant-dropdown{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+}
+
+.search-resturant-dropdown-searchbar{
+  position: absolute;
+  width: 500px;
+}
+
+
+.search-resturants >button{
+  margin-left:5px ;
+  width: 30%;
+  height: 50px;
+  border-radius: 9px;
+  border: none;
+  outline: none;
+  background-color: var(--bg-color-darker);
+
+}
+
+.services{
+  background-color: whitesmoke;
+  margin: 50px 0 50px 0;
+  width: 100%;
+  padding: 50px 150px 50px 150px;
+}
+.services-container{
+  background-color: var(--bg-color);
+  width: 100%;
+  height: 40vh;
+  margin: 40px 0 40px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+}
+.services-container-elem{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: white;
+  width: 50%;
+  height: 100%;
+  padding: 50px;
+  border-radius: 10px;
+
+}
+
+.services-container-elem-start{
+
+  align-items: flex-start;
+  justify-content: center;
+}
+.services-container-elem-end{
+
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.services-container-img{
+  width: 50%;
+  height: 100%;
+}
+
+.services-container-elem > button{
+  height: 20%;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: var(--bg-color-darker);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.services-container-elem-tags{
+  margin: 10px 0 10px 0;
+}
+
+
+/*-------------------Reserve Table Sidebar-----------------*/
+.reservetable-sidepanel-background{
+  width: 100vw;
+  height: 100vh;
+  visibility: hidden;
+  position: fixed;
+  background-color: rgba(0,0,0,0.6);
+  top:0;
+  left:0;
+}
+
+.reservetable-sidepanel{
+  background-color: whitesmoke ;
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  z-index: 1;
+  height: 100vh;
+  width: 30vw;
+  padding: 20px;
+  right:0;
+  top:0;
+  transition: width 0.4s ease-in;
+}
+.reservetable-sidepanel-top{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+#reservetable-sidepanel-head-clsbtn{
+  background-color: whitesmoke;
+  font-size: 50px;
+  color: black;
+  cursor: pointer;
+  
+}
+.reservetable-sidepanel-mid{
+  display: flex;
+  flex-direction: column;
+  align-items:start;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+
+}
+
+.reservetable-sidepanel-mid-dining{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 10% 0 10% ;
+  border-bottom: 2px none green;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+.reservetable-sidepanel-mid-dining > button{
+width: 40%;
+border-width: 1px;
+border-radius: 5px;
+outline: none;
+padding: 3px;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+margin: 10px 5px 10px 5px;
+
+}
+
+
+.reservetable-sidepanel-mid-dining > button > i{
+  text-align: center;
+  margin: 5px 5px 5px 0;
+  font-size: 17px;
+
+}
+.reservetable-sidepanel-mid-dining > button > p{
+  text-align: center;
+  margin: 5px 0 5px 5px;
+  font-size: 15px;
+
+}
+
+.reservetable-sidepanel-mid-date{
+
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 90px;
+  align-items: center;
+  justify-content: space-evenly;
+  overflow-x: scroll;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  scroll-behavior: smooth;
+
+  
+
+}
+.reservetable-sidepanel-mid-date::-webkit-scrollbar{
+  display: none;
+}
+
+.reservetable-sidepanel-mid-date > button{
+border-width: 1px;
+border-radius: 5px;
+outline: none;
+margin: 10px 5px 10px 5px;
+background-color: none;
+border-style: outset;
+padding: 10px 25px 10px 25px;
+
+}
+
+.reservetable-sidepanel-mid-date > button > p{
+  text-align: center;
+  margin: 5px 0 5px 5px;
+  font-size: 15px;
+  font-weight: 600;
+
+}
+
+.reservetable-sidepanel-mid-slot{
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  overflow-x: scroll;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  scroll-behavior: smooth;
+
+  
+  
+
+}
+
+.reservetable-sidepanel-mid-slot::-webkit-scrollbar{
+  display: none;
+}
+
+.reservetable-sidepanel-mid-slot > button{
+width: 20%;
+height: 40px;
+border-width: 1px;
+border-radius: 5px;
+outline: none;
+margin: 10px 5px 10px 5px;
+
+}
+
+
+
+.reservetable-sidepanel-mid-guest{
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+.reservetable-sidepanel-mid-guest > div{
+width: 20%;
+height: 40px;
+border: 1px solid var(--bg-color-darker);
+border-radius: 5px;
+outline: none;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+margin: 10px 5px 10px 5px;
+
+}
+
+
+.reservetable-sidepanel-bottom{
+
+  width: 100%;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0 20px 0 20px;
+  border: 1px solid rgb(216, 209, 209);
+
+}
+.reservetable-sidepanel-bottom > button{
+  width: 20%;
+  height: 40px;
+  border-width: 1px;
+  border-radius: 5px;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 5px 10px 5px;
+  
+  }
+.reservetable-sidepanel-bottom-reserveguest{
+
+}
