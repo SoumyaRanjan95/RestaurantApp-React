@@ -1,10 +1,9 @@
 import {useContext, useEffect, useState} from 'react';
 
-function DropDown({resturant, setResturant}){
+function DropDown({resturant, setResturant, rId,setRId}){
 
     const [filterText, setFilterText] = useState("") 
     const [lists, setLists] = useState([])
-
     
     /*const lists= [
         {city:  "Banglore", restaurant: ["IndiraNagar","Lido Mall","IndiraNagar","IndiraNagar","IndiraNagar"]},
@@ -53,6 +52,10 @@ function DropDown({resturant, setResturant}){
     function DropDownList({lists,filterText,resturant,setResturant}){
 
 
+        const handleSetRestaurant = (item) => {
+            setResturant(item.restaurant)
+            setRId(item.id)
+        }
 
         let filtered = lists.filter((item) => {
             if(item.restaurant.toLowerCase().includes(filterText.toLowerCase()) || item.city.toLowerCase().includes(filterText.toLowerCase())){
@@ -61,8 +64,12 @@ function DropDown({resturant, setResturant}){
         })
 
         let items = filtered.map((item) => {
-            return <a onClick={()=> setResturant(item.restaurant)}><p className='resturants'>{item.restaurant}</p></a>
+            return <a onClick={()=> handleSetRestaurant(item)}><p className='resturants'>{item.restaurant}</p></a>
         })
+
+        /*function CityResturantHolder({items}){
+
+        }*/ //use javascript reduce to see if things work
 
 
         return(

@@ -12,7 +12,7 @@ function Home(){
 
     const [isOpen1, setIsOpen1] = useState(false);
     const ref1 = useRef();
-    const [resturant, setResturant] = useOutletContext()
+    const [resturant, setResturant, rId, setRId] = useOutletContext()
 
     const handleClick = (e) => {
         setIsOpen1(true);
@@ -51,7 +51,7 @@ function Home(){
                 <div className='search-resturant-dropdown-right'>
                 <i class="material-icons">keyboard_arrow_down</i>
                 </div>
-                {isOpen1?(<div className='search-resturant-dropdown-searchbar'><DropDown resturant={resturant} setResturant={setResturant}/></div>):(<></>)}
+                {isOpen1?(<div className='search-resturant-dropdown-searchbar'><DropDown resturant={resturant} setResturant={setResturant} rId={rId}  setRId={setRId} /></div>):(<></>)}
           </div>
           <button onClick={handleReserverTable}>Reserve Table</button>
           <ReserveTable/>
@@ -62,7 +62,7 @@ function Home(){
              <div className='services-container'>
                 <img className='services-container-img' src=''/>
                 <div className='services-container-elem services-container-elem-end'>
-                  <h8 className='services-container-elem-tags'>BARBEQUE NATION</h8>
+                  <h8 className='services-container-elem-tags'>OUR RESTAURANT</h8>
                   <h2 className='services-container-elem-tags'> Dine Out With Us</h2>
                   <button className='services-container-elem-tags'> Reserve Table <i class="material-icons">arrow_forward</i>
                   </button>
@@ -72,8 +72,8 @@ function Home(){
   
              <div className='services-container'>
                 <div className='services-container-elem services-container-elem-start'>
-                  <h8 className='services-container-elem-tags'>BARBEQUE NATION</h8>
-                  <h2 className='services-container-elem-tags'> Catering By Barbeque Nation</h2>
+                  <h8 className='services-container-elem-tags'>OUR RESTAURANT</h8>
+                  <h2 className='services-container-elem-tags'> Catering By Our Restaurant</h2>
                   <button className='services-container-elem-tags'> Send Enquiry <i class="material-icons">arrow_forward</i>
                   </button>
   

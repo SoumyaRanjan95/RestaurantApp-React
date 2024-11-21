@@ -19,39 +19,41 @@ function SidePanel(){
                     <h1>Logo</h1>
                     <a id="sidepanel-head-clsbtn" onClick={toggleClose}>×</a>
                 </div>
+                <hr/>
+
                 <div className="sidepanel-body">
                     <div class="sidepanel-body-container">
-                        <h3>Barbeque Nation</h3>
+                        <h3>Our Restaurant</h3>
                         <div className="sidepanel-body-options">
-                            <p>Home</p>
-                            <p>Delivery/Takeaway</p>
-                            <p>Happiness Card</p>
-                            <p>Whats on BBQN</p>
-                            <p>Today's Menu</p>
-                            <p>Catering</p>
+                            <p className="links">Home</p>
+                            <p className="links">Delivery/Takeaway</p>
+                            <p className="links">Happiness Card</p>
+                            <p className="links">What's here</p>
+                            <p className="links">Today's Menu</p>
+                            <p className="links">Catering</p>
                         </div>
                     </div>
 
                     <div class="sidepanel-body-container">
                         <h3>About</h3>
                         <div className="sidepanel-body-options">
-                            <p>About Us</p>
-                            <p>Smiles</p>
-                            <p>Nutrition Information</p>
-                            <p>Blog</p>
-                            <p>News</p>
+                            <p className="links">About Us</p>
+                            <p className="links">Smiles</p>
+                            <p className="links">Nutrition Information</p>
+                            <p className="links">Blog</p>
+                            <p className="links">News</p>
                         </div>
                     </div>
 
                     <div class="sidepanel-body-container">
                         <h3>Others</h3>
                         <div className="sidepanel-body-options">
-                            <p>Contact Us</p>
-                            <p>Corporate Enquiry</p>
-                            <p>Investor Relations</p>
-                            <p>FAQ</p>
-                            <p>Media Coverage</p>
-                            <p>Barbeque Nation Partnership</p>
+                            <p className="links">Contact Us</p>
+                            <p className="links">Corporate Enquiry</p>
+                            <p className="links">Investor Relations</p>
+                            <p className="links">FAQ</p>
+                            <p className="links">Media Coverage</p>
+                            <p className="links">Our Restaurant Partnership</p>
                         </div>
                     </div>
                 </div>

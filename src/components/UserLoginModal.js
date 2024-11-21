@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { useContext, useState , useEffect} from "react";
 import { UserContext } from "../contexts/Context";
+import { useDispatch } from "react-redux";
+import {authenticateUserThunk} from '../redux_app/features/authenticate/autheticateSlice'
+import { useSelector } from "react-redux";
+import CSRFToken from "./CSRFToken";
 
 function UserLoginModal({setLOS}){
 
@@ -8,9 +12,12 @@ function UserLoginModal({setLOS}){
     const [failedMsg, setFailedMsg] = useState("")
     const {user, setUser} = useContext(UserContext)
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const dispatch = useDispatch()
+    const isAuthenticated=useSelector(state => state)
+
+    /*useEffect(() => {
+        //fetchData();
+    }, []);*/
     
     function closeModal(){
         document.querySelector(".modalBackground").style.visibility = "hidden"
@@ -22,7 +29,7 @@ function UserLoginModal({setLOS}){
         setInputValue({...inputValue,[name]: value})
     }
 
-    async function fetchData(){
+    /*async function fetchData(){
 
           try{
 
@@ -38,7 +45,7 @@ function UserLoginModal({setLOS}){
     
               let data = await response.json();
               console.log(data)
-              setUser({...user,user:data["data"]["username"], isLogged: true, reservations:data["data"]["reservations"]})
+              //setUser({...user,user:data["data"]["username"], isLogged: true, reservations:data["data"]["reservations"]})
               console.log(user)
               closeModal();
 
@@ -48,13 +55,17 @@ function UserLoginModal({setLOS}){
 
 
           }
-    }
+    }*/
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        fetchData();
+        dispatch(authenticateUserThunk(inputValue))
+        .then(res => console.log(res.payload.data))
+        //fetchData();
         setInputValue({...inputValue,mobile:"",password:""})
+        closeModal();
+
 
     }
 
@@ -70,12 +81,12 @@ function UserLoginModal({setLOS}){
                     <input type="text" name="mobile" value={inputValue.mobile} onChange={handleChange} placeholder="Enter you Number"></input>
                     <input type="password" name="password" value={inputValue.password} onChange={handleChange} placeholder="Enter Password" required></input>
                     {failedMsg==""?(<></>):(<p style={{'color':'red'}}>{failedMsg}</p>)}
-                    <input type="submit" value="Next"/>
+                    <input type="submit" value="Submit"/>
                 </form>
 
             </div>
             <div className="LoginModal-bottom">
-                <p>Don't have an Account <Link onClick={() => setLOS("signup")} style={{textDecoration: 'none'}} >Sign Up</Link></p>
+                <p>Don't have an Account <Link className="links" onClick={() => setLOS("signup")} style={{textDecoration: 'none'}} >Sign Up</Link></p>
             </div>
         </div>
 

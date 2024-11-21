@@ -1,9 +1,39 @@
 /*Root setting*/
+
+@import url("App1.css");
+
 #root{
   --bg-color: rgb(234, 225, 219);
   --bg-color-darker: rgb(244, 197, 166);
   --dark-mode-bg: rgb(32, 30, 30);  
   
+}
+
+
+
+.maticon:hover{
+  color: white;
+  box-shadow: 0px 0px 5px 1px black;  
+
+}
+
+#message{
+  width: 25vw;
+  height: 60px;
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  position: fixed;
+  top:80px;
+  right: 5px;
+  border: 2px solid var(--bg-color-darker);
+  transition: width 3s ease-in;
+  background-color: whitesmoke;
+  border-radius: 8px;
+  color: green;
+  padding-left: 5px;
+
 }
 
 
@@ -33,13 +63,25 @@
   position: fixed;
   width: 100%;
   height: 10vh;
-  padding: 0 50px 0 50px;
-  border-bottom: 1px solid chocolate;
-  margin-right: 150px;
+  border-bottom: 2px solid rgba(194, 193, 193, 0.677);
+  box-shadow: 0px 0px 2px 1px var(--bg-color);
+  padding-left: 50px;
+  padding-right: 50px;
 
 }
 
+.links{
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.1s;
+}
 
+.links:hover{
+  color: var(--bg-color-darker);
+  text-decoration: underline
+}
 
 .navleft{
   display: flex;
@@ -57,7 +99,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-right: 150px;
 }
 
 
@@ -71,6 +112,7 @@
   border-radius: 5px;
   margin: 0 5px 0 5px;
   cursor: pointer;
+  transition: color 0.2s, box-shadow 0.2s;
 
 }
 
@@ -87,6 +129,7 @@
   height:40px;
   padding: 5px;
   cursor: pointer;
+  transition: color 0.2s, box-shadow 0.2s;
 
 
  }
@@ -95,6 +138,14 @@
  }
  .searchbar-restname{
   width: 120px;
+ }
+
+ .searchbar:hover{
+  color: white;
+  box-shadow: 0px 0px 5px 1px black;  
+  & .dropdown{
+    color: black;
+  }
  }
  /*Dropdown*/
  .dropdown{
@@ -111,8 +162,26 @@
   visibility: visible;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   top: 50px;
+  background-color: white;
+ }
+
+ .dropdown:hover{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  max-height: 450px;
+  padding: 10px;
+  border-radius: 7px;
+  margin-top: 15px;
+  visibility: visible;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  top: 50px;
   z-index: 1;
   background-color: white;
+  color: black;
  }
  .dropdown-open{
   visibility: visible;
@@ -126,6 +195,7 @@
   border-radius: 3px;
   border: none;
   outline: none;
+  text-indent: 15px;
 
   
 }
@@ -182,7 +252,7 @@ font-size: 30px; }
   flex-direction: column;
   padding: 30px;
   border-radius: 10px;
-
+  cursor: pointer;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -196,8 +266,13 @@ font-size: 30px; }
   justify-content: space-between;
   background-color: var(--bg-color);
   margin-bottom: 10px;
+}
+.LoginModal-top >h5{
+  font-size: 30px;
+  font-weight: 500;
 
 }
+
 .LoginModal-mid{
   width: 100%;
   display: flex;
@@ -211,6 +286,7 @@ font-size: 30px; }
   background-color: var(--bg-color);
   margin-top: 10px;
   margin-bottom: 5px;
+  font-weight: 500;
 }
 
 .LoginModal-mid > input{
@@ -225,8 +301,21 @@ font-size: 30px; }
 
 }
 
+.LoginModal-mid > input:focus{
+  box-shadow: 0px 0px 3px 0.5px black;  
+
+}
+
 .LoginModal-mid > input[type="submit"]{
 background-color: var(--bg-color-darker);
+transition: box-shadow 0.2s, color 0.2s;
+font-weight: 500;
+}
+
+.LoginModal-mid > input[type="submit"]:hover{
+  color:white;
+  box-shadow: 0px 0px 3px 0.5px black;  
+
 }
 
 .LoginModal-bottom{
@@ -237,6 +326,17 @@ background-color: var(--bg-color-darker);
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: var(--bg-color);
+}
+
+#logout{
+  background-color: var(--bg-color-darker);
+  width: 40px;
+  height:40px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px 5px 5px 5px;
+  cursor: pointer;
+  padding: 10px;
 }
 
 /*----------------Cart ------------------------*/
@@ -266,25 +366,122 @@ background-color: var(--bg-color-darker);
 }
 
 .reservations{
-  width: 80vw;
-  height: 800vh;
-  background-color: whitesmoke;
+  position: fixed;
+  width: 50vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  background-color: whitesmoke;
+  overflow-y: scroll;
+  z-index: 100 !important;
+  padding: 30px;
+  
+}
+
+.reservations-head{
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+
 }
 
 .reservation-list-item{
+
   display: flex;
   flex-direction: row;
-  margin: 10px;
+  width: 100%;
+  margin: 10px 0px 10px 0px;
+  justify-content: flex-start;
+  align-items:center;
+  /*border-left: 5px solid var(--bg-color-darker);*/
+  /*box-shadow: 0px 0px 0.5px 0.5px;*/
+  box-shadow: 0px 0px 5px 1px var(--bg-color-darker);
+  border-radius: 8px;
+  transition: box-shadow 0.2ms ease-in;
   padding: 10px;
-  overflow-y: scroll;
+  cursor: pointer;
+
 }
-.reservation-list-item > p{
-  margin: 10px;
-  padding: 10px;
+
+.reservation-list-item:hover{
+  box-shadow: 0px 0px 10px 1px var(--bg-color-darker);
+}
+.reservation-list-item1{
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+}
+
+.reservation-list-item-body{
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+
+}
+.reservation-list-item-body-items{
+  display: flex;
+  flex-direction: row;
+}
+
+.reservation-list-item-body-items > i{
+  font-size: 30px;
+}
+
+.reservation-list-item-body-items > p{
+  margin: 3px;
+  margin-left: 8px;
+}
+
+.reservation-list-item-footer{
+  height: 50px;
+}
+.reservation-list-item-footer-items{
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+.reservation-list-item-footer-items > i{
+  font-size: 30px;
+
+}
+
+.no-reservations{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.reservation-list-item-body{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 300px;
+  align-items: center;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+
+.reservation-list-item-footer{
+  font-size: 17px;
+  font-weight: 500;
+
+}
+
+.reservation-list-item2 > i{
+  color: rgb(255, 66, 66);
+  transition: color 1s;
+
+  font-size: 30px;
+}
+.reservation-list-item2 > i:hover{
+  color: red;
 }
 
 /*---------------------------Side Panel----------------------------*/
@@ -303,14 +500,15 @@ background-color: var(--bg-color-darker);
   display: flex;
   position: fixed;
   flex-direction: column;
-  z-index: 1;
   height: 100vh;
-  width: 40vw;
+  width: 35vw;
   overflow-y: scroll;
   padding: 20px;
   right:0;
   top:0;
   transition: width 0.4s ease-in;
+  z-index: 2 !important;
+
 }
 .sidepanel-head{
   background-color: whitesmoke;
@@ -324,7 +522,7 @@ background-color: var(--bg-color-darker);
 }
 #sidepanel-head-clsbtn{
   background-color: whitesmoke;
-  font-size: 50px;
+  font-size: 30px;
   color: black;
   cursor: pointer;
   
@@ -400,6 +598,10 @@ background-color: whitesmoke;
   background-color: var(--bg-color);
   width: 30%;
 }
+
+.Footer-mid-card > h5{
+  font-weight: 700;
+}
 .Footer-mid-card-items{
   display: grid;
   grid-template-columns: auto auto;
@@ -412,14 +614,11 @@ background-color: whitesmoke;
   align-items: center;
   background-color: var(--bg-color);
   width: 100%;
-  margin: 20px 0 20px 0;;
 
 }
-.footer-bottom-right{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
+
+.Footer-mid1-elem{
+  font-weight: 300;
 }
 
 
@@ -446,6 +645,7 @@ background-color: whitesmoke;
   padding: 15px;
   border-radius: 10px;
   cursor: pointer;
+  box-shadow: 0px 0px 10px 1px black;
 }
 .search-resturant-dropdown{
   display: flex;
@@ -469,7 +669,13 @@ background-color: whitesmoke;
   border: none;
   outline: none;
   background-color: var(--bg-color-darker);
+  font-weight: 500;
 
+}
+
+.search-resturants>button:hover{
+  color: white;
+  box-shadow: 0px 0px 5px 1px black;  
 }
 
 .services{
@@ -533,6 +739,12 @@ background-color: whitesmoke;
 
 .services-container-elem-tags{
   margin: 10px 0 10px 0;
+  font-weight: 500;
+}
+.services-container-elem  > button:hover{
+  color: white;
+  box-shadow: 0px 0px 5px 1px black;  
+
 }
 
 
@@ -552,13 +764,13 @@ background-color: whitesmoke;
   display: flex;
   position: fixed;
   flex-direction: column;
-  z-index: 1;
   height: 100vh;
   width: 30vw;
   padding: 20px;
   right:0;
   top:0;
   transition: width 0.4s ease-in;
+  z-index: 2 !important;
 }
 .reservetable-sidepanel-top{
   display: flex;
@@ -571,7 +783,7 @@ background-color: whitesmoke;
 }
 #reservetable-sidepanel-head-clsbtn{
   background-color: whitesmoke;
-  font-size: 50px;
+  font-size: 30px;
   color: black;
   cursor: pointer;
   
@@ -609,7 +821,13 @@ flex-direction: row;
 align-items: center;
 justify-content: center;
 margin: 10px 5px 10px 5px;
+font-weight: 500;
 
+}
+
+.reservetable-sidepanel-mid-dining > button:hover{
+  color: var(--bg-color-darker);
+  border: 1px solid var(--bg-color-darker);
 }
 
 
@@ -654,6 +872,8 @@ margin: 10px 5px 10px 5px;
 background-color: none;
 border-style: outset;
 padding: 10px 25px 10px 25px;
+font-weight: 500;
+
 
 }
 
@@ -693,6 +913,7 @@ border-width: 1px;
 border-radius: 5px;
 outline: none;
 margin: 10px 5px 10px 5px;
+font-weight: 500;
 
 }
 
@@ -712,7 +933,7 @@ margin: 10px 5px 10px 5px;
 .reservetable-sidepanel-mid-guest > div{
 width: 20%;
 height: 40px;
-border: 1px solid var(--bg-color-darker);
+border: 1px solid var(--bg-color);
 border-radius: 5px;
 outline: none;
 display: flex;
@@ -720,7 +941,8 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 margin: 10px 5px 10px 5px;
-
+font-size: 25px;
+font-weight: 600;
 }
 
 
@@ -752,6 +974,141 @@ margin: 10px 5px 10px 5px;
   margin: 10px 5px 10px 5px;
   
   }
+
+.inc-dec{
+  background-color: var(--bg-color);
+  transition: background-color 0.2s;
+}
+.inc-dec:hover{
+  background-color: var(--bg-color-darker);
+}
 .reservetable-sidepanel-bottom-reserveguest{
 
+}
+
+.reserve-btn{
+  font-weight: 500;
+
+}
+
+.reserve-btn:hover{
+  color: var(--bg-color-darker);
+  border: 1px solid var(--bg-color-darker);
+
+}
+
+
+.menu{
+  background-color: whitesmoke;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 100px;
+}
+.menu-header{
+  width: 80vw;
+  padding: 10px;
+
+}
+
+.menu-body{
+  width: 80vw;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  border: 2px solid var(--bg-color-darker);
+  border-radius: 8px;
+}
+
+.placeorder-form > input[type='text']{
+  width: 30%;
+  height: 35px;
+  text-indent: 5px;
+  border-radius: 6px;
+  margin: 0px 0px 10px 0px;
+  outline: none;
+  border: 2px solid var(--bg-color-darker);
+  transition: box-shadow 0.2s;
+  background-color: whitesmoke;
+}
+
+.placeorder-form > input[type='text']:focus{
+  box-shadow: 0px 0px 3px 0.5px var(--bg-color-darker);  
+}
+
+
+.menu-footer{
+  width: 80vw;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.menu-footer-right{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.menu-footer-right > p{
+font-weight: 500;
+}
+
+
+.container{
+  width: calc(90vw / 3.5);
+
+}
+
+.menu-element{
+  display: flex;
+  flex-direction: row;
+  margin: 5px 0px 5px 0px;
+  padding: 2px 3px 2px 3px;
+}
+
+.menu-element > label{
+  width: 70%;
+}
+
+.menu-element-items{
+  width: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-order{
+  border-radius: 6px;
+  width: 90px;
+  border: 2px solid var(--bg-color-darker);
+  background-color: var(--bg-color-darker);
+  padding: 5px;
+  font-weight: 500;
+  transition: box-shadow 0.2s;
+
+}
+.btn-order:hover{
+  color: white;
+  box-shadow: 0px 0px 5px 1px black;  
+}
+
+.veg{
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+}
+.nonveg{
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
 }

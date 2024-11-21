@@ -8,27 +8,30 @@ import UserLogin from "./components/UserLogin"
 import Footer from "./components/Footer"
 import Cart from "./components/Cart"
 import Logout from "./components/Logout"
-
+import Message from './components/Message';
 //import MyContext from './contexts/Context';
-import {ResturantContext,UserContext} from './contexts/Context';
+import {ResturantContext,UserContext, MessageContext} from './contexts/Context';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 function NavBar({user}){
 
+
+  const state = useSelector(state => state.authenticate);
+
   return (
     <div className='navbar'>
       <div className='navleft'>
-        <Link style={{textDecoration: 'none'}} to={`promotions`}>Whats on BBQ'N</Link>
-        <Link style={{textDecoration: 'none'}} to={`promotions`}>Today's Menu</Link>
-        <Link style={{textDecoration: 'none'}} to={`promotions`}>Catering</Link>
+      <Link className='links'  to={`/`}>Home</Link>
+        <Link className='links'  to={`menu`}>Our Menu</Link>
+        <Link className='links' to={`order`}>Order</Link>
 
       </div>
       <div className='navright'>
-        <UserLogin/>
+        {(state.isAuthenticated==false)?(<UserLogin/>):(<Logout/>)}
         <Cart/>
         <Search/>
         <BreadCrumb/>
-        {user["user"]!=""?(<Logout user/>):(<></>)}
       </div>
   </div>
 
@@ -41,7 +44,13 @@ function NavBar({user}){
 
 function App() {
 
-  const [resturant, setResturant] = useState("")
+  const [resturant, setResturant] = useState('')
+  const [rId, setRId] = useState()
+  const [msg,setMsg] = useState({
+    message: '',
+    alertStatus: false,
+  })
+
   const [user, setUser] = useState({
     user:"",
     isLogged: false,
@@ -49,14 +58,20 @@ function App() {
   });
 
 
+  
+
 
   return (
     <>
     <UserContext.Provider value = {{user, setUser}}>
-      <ResturantContext.Provider value = {{resturant, setResturant}}>
+      <MessageContext.Provider value={{msg,setMsg}}>
+      <Message/>
+      <ResturantContext.Provider value = {{resturant, setResturant,rId, setRId}}>
       <NavBar user={user}/>
-      <Outlet context={[resturant, setResturant]}/>
+      <Outlet context={[resturant, setResturant, rId, setRId]}/>
       </ResturantContext.Provider>
+      </MessageContext.Provider>
+
     </UserContext.Provider>
     <Footer/>
     </>

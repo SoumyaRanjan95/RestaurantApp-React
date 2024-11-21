@@ -14,7 +14,7 @@ function BreadCrumb(){
   return (
     <>
       <SidePanel/>
-      <div id="breadcrumb">
+      <div className='maticon'id="breadcrumb">
         <a  onClick={toggleShow}> <i class="material-icons">menu</i></a>
       </div>
 

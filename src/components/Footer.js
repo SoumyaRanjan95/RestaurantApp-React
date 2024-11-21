@@ -9,23 +9,23 @@ function Footer(){
                 <div className="Footer-mid-card">
                     <h5 className="Footer-mid-elem">Our Story</h5>
                     <div className="Footer-mid-card-items">
-                        <p>News</p>
-                        <p>Hapiness card</p>
-                        <p>Career</p>
-                        <p>FAQ</p>
-                        <p>Investor Relationship</p>
-                        <p>BBQN Partnerships</p>
+                        <p className='links'>News</p>
+                        <p className='links'>Coupons</p>
+                        <p className='links'>Career</p>
+                        <p className='links'>FAQ</p>
+                        <p className='links'>Investor Relationship</p>
+                        <p className='links'>Partnerships</p>
                     </div>
                 </div>
                 <div className="Footer-mid-card">
                     <h5 className="Footer-mid-elem">Location</h5>
                     <div className="Footer-mid-card-items">
-                        <p>Blog</p>
-                        <p>What's on BBQN</p>
-                        <p>Contact Us</p>
-                        <p>Corporate Enquiry</p>
-                        <p>Media Coverage</p>
-                        <p>Nutrition Information</p>
+                        <p className='links'>Blog</p>
+                        <p className='links'>What's here</p>
+                        <p className='links'>Contact Us</p>
+                        <p className='links'>Corporate Enquiry</p>
+                        <p className='links'>Media Coverage</p>
+                        <p className='links'>Nutrition Information</p>
                     </div>
                 </div>
                 <div className="Footer-mid-card">
@@ -34,11 +34,7 @@ function Footer(){
 
             </div>
             <div className="Footer-bottom">
-                <div>©All Rights Reserved by BBQ Nations</div>
-                <div className="footer-bottom-right">
-                    <p>Privacy Policy</p>
-                    <p>Terms and Conditions</p>
-                </div>
+                <div>©All Rights Reserved by <b>Our Restaurant</b></div>
             </div>
         </div>
     )

@@ -7,12 +7,12 @@ function Cart(){
     function toggleShow(){
         document.querySelector(".reservations-background").style.visibility = "visible";
     
-      }
+      }//shopping_cart
 
     return(
         <>
-        <div className="cart">
-            <i onClick={toggleShow} class="material-icons">shopping_cart</i>
+        <div className="cart maticon">
+            <i onClick={toggleShow} class="material-icons">event_seat</i>
         </div>
         <Reservations/>
         </>

@@ -3,11 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, RouterProvider, createBrowserRouter} from "react-router-dom";
+import {BrowserRouter, Outlet, RouterProvider, createBrowserRouter} from "react-router-dom";
 import Home from './components/Home';
 import ReserveTable from './components/ReserveTable';
 import SignUpModal from './components/SignUpModal';
 import Reservations from './components/Reservations';
+import Menu from './components/Menu';
+import Staff from './components/Staff';
+
+import { Provider } from 'react-redux';
+import store from './redux_app/store';
+import Order from './components/Order';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -22,22 +28,51 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home/>,
       },
+      {
+        path: "menu",
+        element:<Menu/>
+      },
+      {
+        path: "order",
+        element:<Order/>
+      }
 
     ],
-  }
+  },
+  {
+    path: '/staff',
+    element: <Outlet/>, // setting an outlet elements adds the children elemnt to the parent 
+    children:[     
+      {
+        index: true,
+        element:<Staff/>,
+      },
+      {
+        path: "setmenu",
+        element: <p>This is for setting Menu</p>,
+      },
+      {
+        path: "orderscreen",
+        element:<p>This is for live Orders</p>,
+      }
+
+    ],
+  }, 
 ])
 
+
 root.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </Provider>
+
 );
 
 
 /*
 root.render(
   <React.StrictMode>
-        <Reservations/>
+    <Reservations/>
   </React.StrictMode>
 );
 */
