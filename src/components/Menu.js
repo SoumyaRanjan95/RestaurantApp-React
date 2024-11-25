@@ -1,61 +1,106 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-
+import * as Data from "./Data";
+import { ResturantContext } from "../contexts/Context";
+import { useOutletContext } from "react-router-dom";
+import React from "react";
+import { redirect } from "react-router-dom";
 function Menu(){
 
+    const [resturant, setResturant, rId, setRId] = useOutletContext()
 
 
+    console.log("Menu updates")
+    //const {rId,setRId,resturant, setResturant} = useContext(ResturantContext)
 
-    const foodData = [
-        {id: 1,type:'starters', name: 'Gobi Manchurian', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: true},
-        {id: 2,type:'starters', name: 'Gobi 65', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: true},
-        {id: 3,type:'starters', name: 'Paneer Manchurian', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: false},
-        {id: 4,type:'starters', name: 'Kadai Paneer', vegOrNonVeg: 'veg', price:150, info: "Dry curry", available: true},
-        {id: 5,type:'biryani', name: 'Chicken Biryani', vegOrNonVeg: 'nonveg', price:550, info: "Dry curry", available: false},
-        {id: 6,type:'biryani', name: 'Mutton Biryani', vegOrNonVeg: 'nonveg', price:508, info: "Dry curry", available: true},
-        {id: 7,type:'biryani', name: 'Paneer Biryani', vegOrNonVeg: 'veg', price:505, info: "Dry curry", available: true},
-        {id: 8,type:'biryani', name: 'Prawn Biryani', vegOrNonVeg: 'nonveg', price:1050, info: "Dry curry", available: true},
-        {id: 9,type:'bread', name: 'Kulcha', vegOrNonVeg: 'veg', price:950, info: "Dry curry", available: true},
-        {id: 10,type:'bread', name: 'Naan', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: true},
-        {id: 11,type:'bread', name: 'Rumali Roti', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: false},
-        {id: 12,type:'Soup', name: 'Chicken Hot & Sour Soup', vegOrNonVeg: 'nonveg', price:150, info: "Dry curry", available: true},
-        {id: 13,type:'starters', name: 'Chicken Manchow Soup', vegOrNonVeg: 'nonveg', price:850, info: "Dry curry", available: true},
-        {id: 14,type:'starters', name: 'Veg Hot & Sour', vegOrNonVeg: 'veg', price:508, info: "Dry curry", available: true},
-        {id: 15,type:'starters', name: 'Gobi Manchurian', vegOrNonVeg: 'veg', price:509, info: "Dry curry", available: true},
-        {id: 16,type:'starters', name: 'Gobi Manchurian', vegOrNonVeg: 'veg', price:450, info: "Dry curry", available: true},
-    ];
+    const RestMenu = Data.Menu.filter((item)=>{
+        if(item.restaurant_id === rId){
+            return true
+        }else{
+            return false
+        }
+    })
+
+    const[foodData, setFoodData] = useState(RestMenu)
+
+    const foodData1 = RestMenu
+    console.log(foodData1)
+
+    const obj = {
+        id: null,
+        type: null,
+        name: null,
+        vegOrNonVeg:null,
+        price:null,
+        info: null,
+        available: null,
+        restaurant_id:null,
+    } 
+
+
 
     const [checkState, setCheckState] = useState(new Array(foodData.length).fill(false))
+    const [checkQuantity, setCheckQuantity] = useState(new Array(foodData.length).fill(0))
+    //const [checkMenuState, setCheckMenuState] = useState(new Array(foodData.length).fill(obj))
     const [price, setPrice] = useState(0)
     const [tableNo, setTableNo] = useState('')
+
+    function findPostion(foodData,id){
+        function getIndex(item){
+            return item.id === id
+        }
+        return foodData.findIndex(getIndex,id)
+
+    }
 
     useEffect(() =>{
         const totalPrice = checkState.reduce((acc, state, index) =>{
             if(state == true){
-                return acc + foodData[index].price
+                return acc + (foodData[index].price * checkQuantity[index])
             }
             return acc
         }, 0);
 
         setPrice(totalPrice)
-    }, [checkState])
+    }, [checkState, checkQuantity])
 
-    console.log(checkState)
 
     const handleCheckChange = (position) => {
+
         const updatedCheck = checkState.map((item, index) => 
             index === position ? !item : item
         )
+        const updatedQuantity = checkQuantity.map((item, index) =>{
+            if(index == position){
+                item = 0
+                return item
+            } 
+            return item
+        })
         setCheckState(updatedCheck)
+        setCheckQuantity(updatedQuantity)
+
+    }
+
+    const handleQuantityChange = (e,position) => {
+        const updatedQuantity = checkQuantity.map((item, index) =>{
+            if(index == position){
+                item = e.target.value
+                return item
+            } 
+            return item
+        })
+        setCheckQuantity(updatedQuantity)
 
 
     }
 
+    
 
 
-    function MenuElem({index, name, price, vegOrNonVeg, info, available}){
-        let i = index-1;
+
+    function MenuElem({position,id, name, price, vegOrNonVeg, info, available}){
+        let i = position;
         return (
             <>
                 {available?(<>
@@ -66,13 +111,14 @@ function Menu(){
                         <span className={vegOrNonVeg}></span>
                         <span>&#x20B9;{price}</span>
                         <input
-                         id={`checkbox-${index}`}
+                         id={`checkbox-${i}`}
                          type="checkbox"
                          name={"item"}
                          checked={checkState[i]}
                          onChange={() => handleCheckChange(i)}
                          value={name}
                          />
+                         <input autoFocus disabled={!checkState[i]?'disabled':''} type="number" id={`input-number-${i}`} name={"quantity"} min={0} onChange={(e) => handleQuantityChange(e,i)} value={checkQuantity[i]}/>
                     </div>
 
                 </div>
@@ -86,7 +132,7 @@ function Menu(){
                         <span className={vegOrNonVeg}></span>
                         <span>&#x20B9;{price}</span>
                         <input
-                         id={`checkbox-${index}`}
+                         id={`checkbox-${i}`}
                          type="checkbox"
                          name={"item"}
                          checked={checkState[i]}
@@ -94,7 +140,8 @@ function Menu(){
                          disabled
                          value={name}
                          />
-                    </div>
+                         <input autoFocus disabled={'disabled'} type="number" id={`input-number-${i}`} name={"quantity"} min={0} onChange={(e) => handleQuantityChange(e,i)} value={checkQuantity[i]}/>
+                         </div>
 
                 </div>
                     </del>
@@ -108,13 +155,15 @@ function Menu(){
 
     function ItemContainer({type,foodData}){
         const filtered = foodData.map((item) => {
+            let position=findPostion(foodData,item.id)
             if(item.type === type){
-                return <MenuElem index={item.id} name={item.name} price={item.price} vegOrNonVeg={item.vegOrNonVeg} info={item.info} available={item.available}/>
+                return <MenuElem position={position} id={item.id} name={item.name} price={item.price} vegOrNonVeg={item.vegOrNonVeg} info={item.info} available={item.available}/>
             }
             
         })
         return (
             <>
+                <h5>{type}</h5>
                 {filtered}
             </>
 
@@ -130,45 +179,27 @@ function Menu(){
         return price + (price * (10/100))
     }
 
-    return(
-        <div className="menu">
+    return(<>
+
+        {resturant !== ''?(
+            <div className="menu">
             <header className="menu-header">
-                <h4> Our Restaurant Menu </h4>
+                <h4> Our Restaurant Menu : {resturant}</h4>
                 <hr/>
             </header>
 
                 <div className="menu-body">
-                        <div className="row1">
                             <div className="container">
-                                <h5>Soups</h5>
                                 <ItemContainer type='starters' foodData={foodData}/>
                             </div>
 
                             <div className="container">
-                                <h5> Indian Breads</h5>
                                 <ItemContainer type='bread' foodData={foodData}/>
                             </div>
 
-
-                        </div>
-                        <div className="row2">
-
                             <div className="container">
-                                <h5>Biryani</h5>
                                 <ItemContainer type='biryani' foodData={foodData}/>
                             </div>
-
-                        </div>
-                        <div className="row3">
-                        <div className="container">
-                                <h5>Soups</h5>
-                            </div>
-
-                            <div className="container">
-                                <h5>Biryani</h5>
-                            </div>
-
-                        </div>
                 </div>
             <hr/>
 
@@ -184,6 +215,8 @@ function Menu(){
             </footer>
 
         </div>
+        ):(<div style={{'padding-top':'200px','justify-items':"center",'text-align':'center'}}><p>Please Select a Restaurant ...</p></div>)}
+        </>
     )
 }
 export default Menu

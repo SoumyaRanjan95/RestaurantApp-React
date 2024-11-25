@@ -2,7 +2,26 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+export const staffauthenticateThunk = createAsyncThunk('authenticate/staffauthenticateThunk',async (details, {rejectWithValue}) => {
+    try{
+        const config = {
+            headers:{
+                'Content-Type':'application/json',
+                'Accept':'application/json',
+            },
 
+        };
+        const response = await axios.post("http://localhost:8001/staff/",details, config)
+        return response
+    }catch(error){
+        console.log(error)
+        if (error.response && error.response.data.message) {
+            return rejectWithValue(error.response.data.message)
+          } else {
+            return rejectWithValue(error.message)
+          }
+    }
+})
 
 export const authenticateUserThunk = createAsyncThunk('authenticate/authenticateUserThunk', async (authDetails, {rejectWithValue}) => {
     try{

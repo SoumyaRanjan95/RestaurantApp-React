@@ -40,6 +40,6 @@ export const staffauthenticateSlice = createSlice({
     },
 })
 
-export 
 
 export default staffauthenticateSlice.reducer
+

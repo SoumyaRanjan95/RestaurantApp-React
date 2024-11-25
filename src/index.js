@@ -10,6 +10,7 @@ import SignUpModal from './components/SignUpModal';
 import Reservations from './components/Reservations';
 import Menu from './components/Menu';
 import Staff from './components/Staff';
+import StaffDashboard from './components/StaffDashboard';
 
 import { Provider } from 'react-redux';
 import store from './redux_app/store';
@@ -48,13 +49,10 @@ const router = createBrowserRouter([
         element:<Staff/>,
       },
       {
-        path: "setmenu",
-        element: <p>This is for setting Menu</p>,
+        path: "dashboard",
+        element: <StaffDashboard/>,
       },
-      {
-        path: "orderscreen",
-        element:<p>This is for live Orders</p>,
-      }
+
 
     ],
   }, 

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import CSRFToken from "./CSRFToken";
 import { MessageContext } from "../contexts/Context.js";
+import * as Data from './Data.js'
 
 function SignUpModal({setLOS}){
 
@@ -25,7 +26,36 @@ function SignUpModal({setLOS}){
         e.preventDefault();
 
         if(passwd2 == signUpData.password){
-            (async () => {
+
+
+            const userExist = Data.RestaurantUser.filter((item) => {
+                if(item.mobile == signUpData.mobile){
+                    return true
+                }else{
+                    return false
+                }
+            })
+
+            console.log(userExist)
+
+            if(userExist.length !== 0){
+                setSignUpData({mobile:"", fullname:"",email:"",password:""})
+                alert('Mobile No. Exists')
+            }else{
+                Data.RestaurantUser.push({
+                    mobile:signUpData.mobile,
+                    email:signUpData.email,
+                    fullname:signUpData.fullname,
+                    password:signUpData.password,
+                    is_authenticated: false,
+                    is_staff:false,
+                });
+            }
+
+            console.log(Data.RestaurantUser)
+
+
+            /*(async () => {
                 console.log()
                 const rawResponse = await fetch(URL, {
                   method: 'POST',
@@ -39,12 +69,12 @@ function SignUpModal({setLOS}){
               
                 console.log(content);
                 setMsg({...msg, message:content['success'],alertStatus: true})
-              })();
-        }else{
-            console.log("Password not same")
-        }
-        
+              })();*/
 
+
+        }else{
+            alert("Password not same")
+        }
         setSignUpData({mobile:"", fullname:"",email:"",password:""})
         setPasswd2("")
         closeModal()

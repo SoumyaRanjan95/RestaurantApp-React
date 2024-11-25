@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import {authenticateUserThunk} from '../redux_app/features/authenticate/autheticateSlice'
 import { useSelector } from "react-redux";
 import CSRFToken from "./CSRFToken";
+import * as Data from './Data'
 
 function UserLoginModal({setLOS}){
 
@@ -13,7 +14,6 @@ function UserLoginModal({setLOS}){
     const {user, setUser} = useContext(UserContext)
 
     const dispatch = useDispatch()
-    const isAuthenticated=useSelector(state => state)
 
     /*useEffect(() => {
         //fetchData();
@@ -60,8 +60,33 @@ function UserLoginModal({setLOS}){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(authenticateUserThunk(inputValue))
-        .then(res => console.log(res.payload.data))
+
+        let userlogin = Data.RestaurantUser.filter((item) => {
+            if(item.mobile == inputValue.mobile && item.password === inputValue.password){
+                return true
+            }else{
+                return false
+            }
+        });
+
+        if(userlogin.length === 0){
+            alert('Login failed')
+        }else{
+
+            setUser({...user,
+                mobile:userlogin[0].mobile,
+                email:userlogin[0].email,
+                fullname:userlogin[0].fullname,
+                is_authenticated: !userlogin[0].is_authenticated,
+            })   
+        }
+
+
+        console.log(user)
+
+
+        /*dispatch(authenticateUserThunk(inputValue))
+        .then(res => console.log(res.payload.data))*/
         //fetchData();
         setInputValue({...inputValue,mobile:"",password:""})
         closeModal();

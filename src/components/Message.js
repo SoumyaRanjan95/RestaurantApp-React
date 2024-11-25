@@ -6,7 +6,7 @@ function Message(){
     const {msg, setMsg} = useContext(MessageContext)
 
 
-    useEffect(() => {
+    /*useEffect(() => {
         const timeid = setTimeout(() => {
             setMsg({...msg, message:'',alertStatus:false})
             //document.getElementById('message').style.visibility = 'hidden';
@@ -14,7 +14,7 @@ function Message(){
 
         return () => clearTimeout(timeid)
     },[])
-    console.log(msg)
+    console.log(msg)*/
 
     return(
         <>

@@ -3,6 +3,7 @@ import {ResturantContext,UserContext} from "../contexts/Context"
 import { useContext, useState , useRef, useEffect} from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { reserveUserThunk } from "../redux_app/features//authenticate/autheticateSlice";
+import generateString from "../utils/utils";
 function ReserveTable(){
 
     const [isDisabled,setDisabled] = useState()
@@ -19,9 +20,9 @@ function ReserveTable(){
       }
 
     const {resturant, setResturant, rId, setRId} = useContext(ResturantContext)
-    //const {user, setUser} = useContext(UserContext)
+    const {user, setUser} = useContext(UserContext)
 
-    const user = useSelector(state => state.authenticate)
+    //const user = useSelector(state => state.authenticate)
 
     const [dateState, setdateState] = useState('')
     const [slotState, setslotState] = useState('')
@@ -37,9 +38,9 @@ function ReserveTable(){
         mobile:'',
         date: "",
         slot:'',
-        location_id: "",
+        restaurant_id: "",
         guests:0,
-        token:''
+        token:'',
     })
 
     // program to generate random strings
@@ -93,7 +94,7 @@ function ReserveTable(){
         setReserveData({...reserveData, slot: time})
     }
 
-    async function funcreserve(){
+    /*async function funcreserve(){
 
         try{
             const URL = "http://localhost:8001/api/reservations/"
@@ -111,32 +112,20 @@ function ReserveTable(){
         }catch{
 
         }
-    }
+    }*/
 
     const handleReserve = async (user) => {
 
         function authStatus(user){
-            return user.isAuthenticated
+            return user.is_authenticated
         }
 
-
-        const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-        function generateString(length) {
-            let result = ' ';
-            const charactersLength = characters.length;
-            for ( let i = 0; i < length; i++ ) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-        
-            return result;
-        }
             console.log("User status",authStatus(user))
             if(authStatus(user) == true){
-                setReserveData({...reserveData, guests: guest, mobile: user['mobile'], location_id: rId, token: generateString(15)})
+                setReserveData({...reserveData, guests: guest,mobile: user.mobile, restaurant_id: rId, token: generateString(15)})
                 console.log(reserveData)
                 //funcreserve();
-                dispatch(reserveUserThunk(reserveData))
+                //dispatch(reserveUserThunk(reserveData))
                 handleReserverTableClose()
             }else{
                 handleReserverTableClose();

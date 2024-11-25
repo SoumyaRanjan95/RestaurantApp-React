@@ -1,13 +1,11 @@
 import { useSelector } from "react-redux";
 import { UserContext } from "../contexts/Context";
 import { useContext } from "react";
+import * as Data from './Data'
 
-
-function Reservations(){
-    //const {user, setUser} = useContext(UserContext)
-    const user = useSelector(state => state.authenticate)
-
-
+function Reservations({user}){
+    
+    
     function toggleClose(){
         document.querySelector(".reservations-background").style.visibility = "hidden";
     }
@@ -30,10 +28,10 @@ function Reservations(){
 
     function reservelist(user){
 
-        console.log(user['reservations'])
-        if (user['reservations'].length !== 0){
-            return user["reservations"].map((item) => {
-                return (<div className="reservation-list-item">
+        function ReservationTemplate({item}){
+
+            return(
+                <div className="reservation-list-item">
                             <div className="reservation-list-item1">
                 
                                 <div className="reservation-list-item-body">
@@ -41,18 +39,21 @@ function Reservations(){
                                     <div className="reservation-list-item-body-items"><i class="material-icons">diversity_3</i><p>{item['guests']}</p></div>
                                 </div>
                                 <div className="reservation-list-item-footer">
-                                    <div className="reservation-list-item-footer-items"><i class="material-icons">location_on</i><p>{item.location}</p></div>
+                                    <div className="reservation-list-item-footer-items"><i class="material-icons">location_on</i><p>{item.reservation_at}</p><p> Token: {item.reservation_token}</p></div>
                                 </div>
                 
                             </div>
                             <div className="reservation-list-item2">
                                 <i onClick={handleDeleteReservations} class="material-icons">delete</i>
                             </div>
-                        </div>)
-            })
-        }else{
+                </div>
+            )
             
         }
+
+        return user['reservations'].map((item) => {
+            return <ReservationTemplate item={item}/>
+        })
 
     }
     
@@ -61,7 +62,7 @@ function Reservations(){
 
     return(
         <div tabIndex="0" autoFocus onKeyDown={handleCloseKeyDown} className="reservations-background">
-                {!user['isAuthenticated']?(<><div className="reservations"><i style={{"cursor":'pointer'}} onClick={handleReservationClose} class='material-icons'>close</i><div className="no-reservations"><p>No reservations ...</p></div></div></>): 
+                {!user['is_authenticated']?(<><div className="reservations"><i style={{"cursor":'pointer'}} onClick={handleReservationClose} class='material-icons'>close</i><div className="no-reservations"><p>No reservations ...</p></div></div></>): 
 
                 (<>
                 <div className="reservations">

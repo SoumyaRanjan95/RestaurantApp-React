@@ -1,9 +1,9 @@
 import {useContext, useEffect, useState} from 'react';
-
+import * as Data from './Data'
 function DropDown({resturant, setResturant, rId,setRId}){
 
     const [filterText, setFilterText] = useState("") 
-    const [lists, setLists] = useState([])
+    const [lists, setLists] = useState(Data.Restaurants)
     
     /*const lists= [
         {city:  "Banglore", restaurant: ["IndiraNagar","Lido Mall","IndiraNagar","IndiraNagar","IndiraNagar"]},
@@ -14,14 +14,15 @@ function DropDown({resturant, setResturant, rId,setRId}){
         {city:  "GuruGram", restaurant: ["IndiraNagar", "IndiraNagar","IndiraNagar","IndiraNagar","IndiraNagar"]},
     
     ]*/
-    useEffect(() => {
+    /*useEffect(() => {
         const URL = "http://localhost:8001/api/locations/"
         fetch(URL).then(res => res.json()).then(data => {                 
              setLists(data);
      
      
          });
-    },[]);
+    },[]);*/
+
 
 
 
@@ -53,18 +54,18 @@ function DropDown({resturant, setResturant, rId,setRId}){
 
 
         const handleSetRestaurant = (item) => {
-            setResturant(item.restaurant)
+            setResturant(item.name)
             setRId(item.id)
         }
 
         let filtered = lists.filter((item) => {
-            if(item.restaurant.toLowerCase().includes(filterText.toLowerCase()) || item.city.toLowerCase().includes(filterText.toLowerCase())){
+            if(item.name.toLowerCase().includes(filterText.toLowerCase()) || item.city.toLowerCase().includes(filterText.toLowerCase())){
                 return item
             }
         })
 
         let items = filtered.map((item) => {
-            return <a onClick={()=> handleSetRestaurant(item)}><p className='resturants'>{item.restaurant}</p></a>
+            return <a onClick={()=> handleSetRestaurant(item)}><p className='resturants'>{item.name}</p></a>
         })
 
         /*function CityResturantHolder({items}){

@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 function NavBar({user}){
 
 
-  const state = useSelector(state => state.authenticate);
 
   return (
     <div className='navbar'>
@@ -28,7 +27,7 @@ function NavBar({user}){
 
       </div>
       <div className='navright'>
-        {(state.isAuthenticated==false)?(<UserLogin/>):(<Logout/>)}
+        {(user.is_authenticated==false)?(<UserLogin/>):(<Logout/>)}
         <Cart/>
         <Search/>
         <BreadCrumb/>
@@ -52,10 +51,14 @@ function App() {
   })
 
   const [user, setUser] = useState({
-    user:"",
-    isLogged: false,
+    mobile:'', //unique
+    email:'',
+    fullname:'',
+    is_authenticated: false,
     reservations:[],
   });
+
+  const [restaurantMenu, setRestaurantMenu] = useState([])
 
 
   
@@ -66,7 +69,7 @@ function App() {
     <UserContext.Provider value = {{user, setUser}}>
       <MessageContext.Provider value={{msg,setMsg}}>
       <Message/>
-      <ResturantContext.Provider value = {{resturant, setResturant,rId, setRId}}>
+      <ResturantContext.Provider value = {{resturant, setResturant,rId, setRId,restaurantMenu, setRestaurantMenu}}>
       <NavBar user={user}/>
       <Outlet context={[resturant, setResturant, rId, setRId]}/>
       </ResturantContext.Provider>

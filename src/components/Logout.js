@@ -9,7 +9,15 @@ function Logout(){
     const dispatch = useDispatch()
 
     const handleLogout = () => {
-        dispatch(logoutUserThunk({}))        
+        //dispatch(logoutUserThunk({})) 
+        setUser({...user,
+            mobile:'', //unique
+            email:'',
+            fullname:'',
+            is_authenticated: false,
+            reservations:[],
+          })
+
     }
 
 

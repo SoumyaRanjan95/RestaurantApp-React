@@ -1,79 +1,160 @@
 import { useEffect, useState } from "react";
-
+import * as Data from "./Data";
+import { useOutletContext } from "react-router-dom";
+import generateString from "../utils/utils";
 
 function Order(){
 
+    const [resturant, setResturant, rId, setRId] = useOutletContext()
+    const [tableNo, setTableNo] = useState('');
+    const [reservationToken, setReservationToken] = useState('');
 
+    const RestMenu = Data.Menu.filter((item)=>{
+        if(item.restaurant_id === rId){
+            return true
+        }else{
+            return false
+        }
+    })
 
-
-    const foodData = [
-        {id: 1,type:'starters', name: 'Gobi Manchurian', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: true},
-        {id: 2,type:'starters', name: 'Gobi 65', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: true},
-        {id: 3,type:'starters', name: 'Paneer Manchurian', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: false},
-        {id: 4,type:'starters', name: 'Kadai Paneer', vegOrNonVeg: 'veg', price:150, info: "Dry curry", available: true},
-        {id: 5,type:'biryani', name: 'Chicken Biryani', vegOrNonVeg: 'nonveg', price:550, info: "Dry curry", available: false},
-        {id: 6,type:'biryani', name: 'Mutton Biryani', vegOrNonVeg: 'nonveg', price:508, info: "Dry curry", available: true},
-        {id: 7,type:'biryani', name: 'Paneer Biryani', vegOrNonVeg: 'veg', price:505, info: "Dry curry", available: true},
-        {id: 8,type:'biryani', name: 'Prawn Biryani', vegOrNonVeg: 'nonveg', price:1050, info: "Dry curry", available: true},
-        {id: 9,type:'bread', name: 'Kulcha', vegOrNonVeg: 'veg', price:950, info: "Dry curry", available: true},
-        {id: 10,type:'bread', name: 'Naan', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: true},
-        {id: 11,type:'bread', name: 'Rumali Roti', vegOrNonVeg: 'veg', price:50, info: "Dry curry", available: false},
-        {id: 12,type:'Soup', name: 'Chicken Hot & Sour Soup', vegOrNonVeg: 'nonveg', price:150, info: "Dry curry", available: true},
-        {id: 13,type:'starters', name: 'Chicken Manchow Soup', vegOrNonVeg: 'nonveg', price:850, info: "Dry curry", available: true},
-        {id: 14,type:'starters', name: 'Veg Hot & Sour', vegOrNonVeg: 'veg', price:508, info: "Dry curry", available: true},
-        {id: 15,type:'starters', name: 'Gobi Manchurian', vegOrNonVeg: 'veg', price:509, info: "Dry curry", available: true},
-        {id: 16,type:'starters', name: 'Gobi Manchurian', vegOrNonVeg: 'veg', price:450, info: "Dry curry", available: true},
-    ];
-
+    const[foodData, setFoodData] = useState(RestMenu)
     const [checkState, setCheckState] = useState(new Array(foodData.length).fill(false))
+    const [checkQuantity, setCheckQuantity] = useState(new Array(foodData.length).fill(0))
     const [price, setPrice] = useState(0)
-    const [tableNo, setTableNo] = useState('')
-    const [reserveToken, setReserveToken] = useState('')
+
+
+    const [itemList, setItemList] = useState([])
 
 
 
+
+    function findPostion(foodData,id){
+        function getIndex(item){
+            return item.id === id
+        }
+        return foodData.findIndex(getIndex,id)
+
+    }
 
     useEffect(() =>{
         const totalPrice = checkState.reduce((acc, state, index) =>{
             if(state == true){
-                return acc + foodData[index].price
+                return acc + (foodData[index].price * checkQuantity[index])
             }
             return acc
         }, 0);
 
         setPrice(totalPrice)
-    }, [checkState])
+    }, [checkState, checkQuantity])
 
-    const handleCheckChange = (position) => {
+
+    const handleCheckChange = (position,itm) => {
+
         const updatedCheck = checkState.map((item, index) => 
             index === position ? !item : item
         )
+        const updatedQuantity = checkQuantity.map((item, index) =>{
+            if(index == position){
+                item = 0
+                return item
+            } 
+            return item
+        })
         setCheckState(updatedCheck)
-
-
-    }
-
-    const handleOrderSubmit = async(e) => {
-        const s = `Table no : ${e.target.tableNo.value}, Ordered Items: ${e.target}`
-        e.preventDefault();
-        const itemOrdered = checkState.reduce((acc, state, index) =>{
-            if(state == true){
-                acc.push(foodData[index].name)
+        setCheckQuantity(updatedQuantity)
+        const fltr = itemList.filter(item => {
+            if(item.item === itm.name){
+                return false
+            }else{
+                return true
             }
-            return acc
-        }, []);
-        console.log(e.target.tableNo.value)
-        console.log(itemOrdered)
+        })
+       setItemList(fltr)
+
+    }
+
+    const handleQuantityChange = (e,position,itm) => {
+        const updatedQuantity = checkQuantity.map((item, index) =>{
+            if(index == position){
+                item = e.target.value
+                return item
+            } 
+            return item
+        })
+
+        setCheckQuantity(updatedQuantity)
+        /*setItemList([...itemList,
+
+        ])*/
+
+        const itemdat =  {
+            order_id: null, 
+            from_restaurant:rId,
+            item:itm.name,
+            type: itm.type,
+            vegOrNonVeg:itm.vegOrNonVeg, 
+            price: itm.price,
+            quantity:updatedQuantity[position],
+            net_price: (itm.price*updatedQuantity[position]), //Restuarnat.Menu.price
+        }
+        setItemList( // Replace the state
+            [ // with a new array
+              ...itemList, // that contains all the old items
+              itemdat // and one new item at the end
+            ]
+          );
+    }
+    const handleOrderSubmit = async(e) => {
+        e.preventDefault();
+
+
+        const hasReservation = Data.Reservations.filter((item) =>{
+            if(item.reservation_token === reservationToken){
+                return true
+            }
+        })
+
+        if(hasReservation.length !== 0){
+            const orderId = generateString(15);
+            const order = {
+                order_id: orderId,
+                order_datetime: new Date().toUTCString(),
+                from_restaurant: rId,
+                reservation_token: reservationToken,
+                tableNo: tableNo,
+                processed:false,
+            }
+            if(itemList.length !== 0){
+                Data.orderData.push(order)
+                const fltr = itemList.forEach((item) => {
+                    if(item.order_id === null ){
+                        item.order_id = orderId
+                    }
+                })
+                setItemList(fltr)
+                Data.ItemsOrdered.push(itemList)
+
+                console.log(itemList)
+
+            }else{
+                alert('You didnt enter items')
+            }
+
+        }else{
+            alert("You Dont have reservations")
+        }
         setTableNo('')
+        setReservationToken('')
         setCheckState(new Array(foodData.length).fill(false))
-        alert( )
+        setCheckQuantity(new Array(foodData.length).fill(0))
+        setItemList([])
 
     }
 
 
 
-    function MenuElem({index, name, price, vegOrNonVeg, info, available}){
-        let i = index-1;
+    function MenuElem({item,position,id, name, price, vegOrNonVeg, info, available}){
+        let i = position;
         return (
             <>
                 {available?(<>
@@ -84,13 +165,14 @@ function Order(){
                         <span className={vegOrNonVeg}></span>
                         <span>&#x20B9;{price}</span>
                         <input
-                         id={`checkbox-${index}`}
+                         id={`checkbox-${i}`}
                          type="checkbox"
                          name={"item"}
                          checked={checkState[i]}
-                         onChange={() => handleCheckChange(i)}
+                         onChange={() => handleCheckChange(i,item)}
                          value={name}
                          />
+                         <input  disabled={!checkState[i]?'disabled':''} type="number" id={`input-number-${i}`} name={"quantity"} min={0} onChange={(e) => handleQuantityChange(e,i, item)} value={checkQuantity[i]}/>
                     </div>
 
                 </div>
@@ -104,15 +186,16 @@ function Order(){
                         <span className={vegOrNonVeg}></span>
                         <span>&#x20B9;{price}</span>
                         <input
-                         id={`checkbox-${index}`}
+                         id={`checkbox-${i}`}
                          type="checkbox"
                          name={"item"}
                          checked={checkState[i]}
-                         onChange={() => handleCheckChange(i)}
+                         onChange={() => handleCheckChange(i,item)}
                          disabled
                          value={name}
                          />
-                    </div>
+                         <input  disabled={'disabled'} type="number" id={`input-number-${i}`} name={"quantity"} min={0} onChange={(e) => handleQuantityChange(e,i, item)} value={checkQuantity[i]}/>
+                         </div>
 
                 </div>
                     </del>
@@ -126,13 +209,15 @@ function Order(){
 
     function ItemContainer({type,foodData}){
         const filtered = foodData.map((item) => {
+            let position=findPostion(foodData,item.id)
             if(item.type === type){
-                return <MenuElem index={item.id} name={item.name} price={item.price} vegOrNonVeg={item.vegOrNonVeg} info={item.info} available={item.available}/>
+                return <MenuElem item={item} position={position} id={item.id} name={item.name} price={item.price} vegOrNonVeg={item.vegOrNonVeg} info={item.info} available={item.available}/>
             }
             
         })
         return (
             <>
+                <h5>{type}</h5>
                 {filtered}
             </>
 
@@ -148,49 +233,29 @@ function Order(){
         return price + (price * (10/100))
     }
 
-    return(
-        <div className="menu">
+    return(<>
+
+        {resturant !== ''?(
+            <div className="menu">
             <header className="menu-header">
-                <h4> Our Restaurant Menu </h4>
+                <h4> Our Restaurant Menu : {resturant}</h4>
                 <hr/>
             </header>
-
-            <form onSubmit={handleOrderSubmit} className="placeorder-form">
-
-            <input name="reservation_token" type="text" placeholder="Enter Reservation Token..." value={reserveToken} onChange={(e) => setReserveToken(e.target.value)}/>
-            <input name="tableNo" type="text" placeholder="Enter Table No..." value={tableNo} onChange={(e) => setTableNo(e.target.value)}/>
+                <form onSubmit={handleOrderSubmit}>
+                <input  required className='placeorder-form' name="reservation_token" type="text" value={reservationToken} onChange={(e) => setReservationToken(e.target.value)} placeholder="Enter reservation Token..."/>
+                <input  required className='placeorder-form' name="table_no" type="text" value={tableNo} onChange={(e) => setTableNo(e.target.value)} placeholder="Enter table id..."/>
                 <div className="menu-body">
-                        <div className="row1">
                             <div className="container">
-                                <h5>Soups</h5>
                                 <ItemContainer type='starters' foodData={foodData}/>
                             </div>
 
                             <div className="container">
-                                <h5> Indian Breads</h5>
                                 <ItemContainer type='bread' foodData={foodData}/>
                             </div>
 
-
-                        </div>
-                        <div className="row2">
-
                             <div className="container">
-                                <h5>Biryani</h5>
                                 <ItemContainer type='biryani' foodData={foodData}/>
                             </div>
-
-                        </div>
-                        <div className="row3">
-                        <div className="container">
-                                <h5>Soups</h5>
-                            </div>
-
-                            <div className="container">
-                                <h5>Biryani</h5>
-                            </div>
-
-                        </div>
                 </div>
             <hr/>
 
@@ -201,12 +266,14 @@ function Order(){
                     <p>Net total           : {netPrice(price)}</p>
                 </div>
                 <div className="menu-footer-left">
-                    <button className="btn-order" type="submit">Order</button>
+                    <button type="submit" className="btn-order">Order</button>
                 </div>
             </footer>
             </form>
 
         </div>
+        ):(<div style={{'padding-top':'200px','justify-items':"center",'text-align':'center'}}><p>Please Select a Restaurant ...</p></div>)}
+        </>
     )
 }
 export default Order
