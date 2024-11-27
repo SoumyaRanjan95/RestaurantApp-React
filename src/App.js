@@ -22,7 +22,6 @@ function NavBar({user}){
     <div className='navbar'>
       <div className='navleft'>
       <Link className='links'  to={`/`}>Home</Link>
-        <Link className='links'  to={`menu`}>Our Menu</Link>
         <Link className='links' to={`order`}>Order</Link>
 
       </div>

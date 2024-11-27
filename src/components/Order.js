@@ -123,9 +123,9 @@ function Order(){
                 reservation_token: reservationToken,
                 tableNo: tableNo,
                 processed:false,
+                menu_items:[]
             }
             if(itemList.length !== 0){
-                Data.orderData.push(order)
                 const fltr = itemList.forEach((item) => {
                     if(item.order_id === null ){
                         item.order_id = orderId
@@ -133,8 +133,12 @@ function Order(){
                 })
                 setItemList(fltr)
                 Data.ItemsOrdered.push(itemList)
+                order['menu_items'] = itemList
+                Data.orderData.push(order)
 
-                console.log(itemList)
+
+                console.log(order)
+                console.log(JSON.stringify(order))
 
             }else{
                 alert('You didnt enter items')
