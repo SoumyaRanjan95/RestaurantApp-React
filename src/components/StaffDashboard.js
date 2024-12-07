@@ -2,98 +2,75 @@ import { useState } from "react";
 import Order from "./Order";
 import * as Data from "./Data";
 import { connect } from "react-redux";
-import  { redirect } from 'react-router-dom'
+import  { Navigate, redirect, useNavigate } from 'react-router-dom'
+import { logout, stafflogout, processorders } from "../store/action/action";
+import { GlobalContext } from "../store";
+import { useContext } from "react";
+import {getrestaurantmenu,getrestaurantorders,updaterestaurantmenu, getbill, processbill} from '../store/action/action'
+import { useToast } from "../hooks/useToast";
 
 function StaffDashboard(){
 
-    const foodData = Data.Menu
+    const {staffAuthState,staffAuthDispatch} = useContext(GlobalContext)
+        
+    const navigate = useNavigate()
+
+
+
+
+
+    /*const foodData = Data.Menu
     const BillData = Data.BillData
-    const orderData = Data.orderData
+    const orderData = Data.orderData*/
 
     const [show, setShow] = useState('menu')
     const [showBill, setShowBill] = useState(false)
-    const [refVal, setRefVal] = useState()
-    const [generatedBill, setGeneratedBill] = useState({
-        table_no: 15,
-        reference_id:'defg5tg6l',
-        bill_datetime: '',
-        items:[
-            {item:"Bla Bla Bla",no:5},
-            {item:"Bla Bla Bla",no:5},
-            {item:"Bla Bla Bla",no:5},
-            {item:"Bla Bla Bla",no:5},
-            {item:"Bla Bla Bla",no:5},
-            {item:"Bla Bla Bla",no:5},
-        ],
-        price: 500,
-        
-        
-    })
+    const [refVal, setRefVal] = useState('')
+    const toast = useToast()
 
     const handleShowMenu = () => {
         setShow('menu')
+        const getrestaurantmenuAction = getrestaurantmenu(staffAuthDispatch)
+        getrestaurantmenuAction()
+
     }
 
     const handleTodaysOrder = () => {
 
         setShow('orders')
+        const getrestaurantordersAction = getrestaurantorders(staffAuthDispatch)
+        getrestaurantordersAction()
     }
 
     const handleGetBill = () => {
         setShow('bill')
+        getbill(staffAuthDispatch);
+
     }
 
-    const handleGenerateBill =(e) =>{
-        e.preventDefault();
-        
-        const c = BillData.filter((item) =>{
-            if(item.reference_id === refVal){
-                return item
-            }
-            return 
-        })
-        let m = c[0]
-        console.log(c[0], refVal)
-        if(c.length !== 0 && c.length === 1){
-            setShowBill(true)
-            setGeneratedBill({
-                table_no: m.tableNo,
-                reference_id: m.reference_id,
-                bill_datetime: m.bill_datetime,
-                items: m.items,
-                price: m.price,
-            })
-        }
-        else{
-            setShowBill(false)
-        }
+    const handleProcessBill = async (order_id) =>{
+        processbill(order_id)
+       
+        //setShowBill(false)
         
 
     }
 
     const handleLogout = async () => {
+        const logoutAction = stafflogout(staffAuthDispatch, toast)
+        logoutAction();
+        navigate('/staff/')
         
-        const response = await fetch("http://localhost:8001/api/logout", {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-          });
-          const content = await response.json();
-          console.log(content)
-
-          return redirect('/staff')
     }
 
 
-    function UpdateAvailableMenu({foodData}){
+    function UpdateAvailableMenu(){
 
 
 
     
-    
+        const foodData = staffAuthState.available_menu
+
         const foodDataAvailableFill = foodData.map((item => item.available))
     
         const [checkState, setCheckState] = useState(foodDataAvailableFill)
@@ -116,11 +93,24 @@ function StaffDashboard(){
     
     
         }
+
+        const handleUpdateRestaurantMenu = (e) => {
+            e.preventDefault()
+            console.log(foodDataState)
+            const updaterestaurantmenuAction = updaterestaurantmenu(staffAuthDispatch)
+            updaterestaurantmenuAction(foodDataState)
+
+
+        }
     
     
     
-        function MenuElem({index, name, price, vegOrNonVeg, info, available}){
-            let i = index-1;
+        function MenuElem({id, name, price, vegOrNonVeg, available}){
+            function returnPosition(item){
+                return item.id === id
+            }
+            let i = foodDataState.findIndex(returnPosition)
+            
             return (
                 <>
                     {available?(<>
@@ -131,7 +121,7 @@ function StaffDashboard(){
                             <span className={vegOrNonVeg}></span>
                             <span>&#x20B9;{price}</span>
                             <input
-                             id={`checkbox-${index}`}
+                             id={`checkbox-${id}`}
                              type="checkbox"
                              name={"item"}
                              checked={checkState[i]}
@@ -151,7 +141,7 @@ function StaffDashboard(){
                             <span className={vegOrNonVeg}></span>
                             <span>&#x20B9;{price}</span>
                             <input
-                             id={`checkbox-${index}`}
+                             id={`checkbox-${id}`}
                              type="checkbox"
                              name={"item"}
                              checked={checkState[i]}
@@ -181,7 +171,7 @@ function StaffDashboard(){
             })
     
             let items = filtered.map((item) => {
-                return <MenuElem index={item.id} name={item.name} price={item.price} vegOrNonVeg={item.vegOrNonVeg} info={item.info} available={item.available}/>
+                return <MenuElem  id={item.id} name={item.name} price={item.price} vegOrNonVeg={item.vegOrNonVeg} info={item.info} available={item.available}/>
             })
 
 
@@ -193,7 +183,7 @@ function StaffDashboard(){
                     {items.length !==0?items:<p>No Such Items</p>}
                 </div>
             </div> 
-            <button className="menu-items-container-forstaff-button" onClick={() => alert("Make API Calls to Update the MEnu for Specific Restaurant")}>Update</button>
+            <button className="menu-items-container-forstaff-button" onClick={(e) => handleUpdateRestaurantMenu(e)}>Update</button>
             </>
 
         )
@@ -204,7 +194,7 @@ function StaffDashboard(){
     function LiveOrders(){
 
         
-
+        const orderData = staffAuthState.todays_orders
         const orderArrayFill = orderData.map((item => item.processed))
 
         const [orderState,setOrderState] = useState(orderArrayFill)
@@ -212,14 +202,15 @@ function StaffDashboard(){
 
         console.log(orderDataState)
 
-        const handleOrderProcess = (position) => {
+        const handleOrderProcess = (position, order_id) => {
 
-            const process = orderState.map((item, index) => {
+            /*const process = orderState.map((item, index) => {
                 if(index === position){
                     orderDataState[position].processed = !item
                 }
-            })
-            setOrderState(process)
+            })*/
+           const processOrdersAction = processorders(staffAuthDispatch)
+            processOrdersAction(order_id)
 
 
         }
@@ -227,13 +218,13 @@ function StaffDashboard(){
         function OrderFrame({item,position, processed}){
 
 
-            function OrderTable({menu_items}){
+            function OrderTable({items_ordered}){
 
-                const items = menu_items.map((item) => {
+                const items = items_ordered.map((item) => {
                     return(<>
                         <tr>
-                            <td>{item.item}</td>
-                            <td>{item.no}</td>
+                            <td>{item.menu}</td>
+                            <td>{item.quantity}</td>
                         </tr>
                     </>)
                 })
@@ -254,25 +245,31 @@ function StaffDashboard(){
                 {!processed?(<>
                     <div className="order-frame">
                         <div className="order-frame-left">
-                        <   p>Table No: {item.tableNo}</p>
-                        <p>{item.order_datetime}</p>
+                        <p>Table No: {item.table_no}</p>
+                        <p>{new Date(item.order_datetime).toDateString()}</p>
+                        <p>Name: {item.username}</p>
+                        <p>Mobile: {item.mobile}</p>
+
 
                         </div>
-                        <OrderTable menu_items={item.menu_items}/>
+                        <OrderTable items_ordered={item.items_ordered}/>
                         <div className="order-frame-right">
-                            <button onClick={() => handleOrderProcess(position)}>Process</button>
+                            <button onClick={() => handleOrderProcess(position, item.order_id)}>Process</button>
                         </div>
                     </div>
                 </>):(<>
                     <del>
                     <div className="order-frame">
                         <div className="order-frame-left">
-                            <p>Table No: {item.tableNo}</p>
-                            <p>{item.order_datetime}</p>
+                            <p>Table No: {item.table_no}</p>
+                            <p>{new Date(item.order_datetime).toDateString()}</p>
+                            <p>Name: {item.username}</p>
+                            <p>Mobile: {item.mobile}</p>
+
                         </div>
-                        <OrderTable menu_items={item.menu_items}/>
+                        <OrderTable items_ordered={item.items_ordered}/>
                         <div className="order-frame-right">
-                            <button disabled onClick={() => handleOrderProcess(position)}>Process</button>
+                            <button disabled onClick={() => handleOrderProcess(position, item.order_id)}>Process</button>
                         </div>
                     </div>
                     </del>
@@ -302,35 +299,61 @@ function StaffDashboard(){
     }
     function GenerateBill(){
 
+        const bills = staffAuthState.bill_data
 
-
-        const itemslist = generatedBill.items.map((item) => {
-
-            return (<><tr><td>{item.item}</td><td>{item.no}</td></tr></>)
+        const filtered = bills.filter((item) => {
+            if(item.mobile.includes(refVal)){
+                return item
+            }
         })
+
+        const items = filtered.map((item) => {
+
+            return (<>
+
+                <div className="reservations-list-holder order-details">
+                    <div className="reservations-list-holder-left">
+                        <div className="reservations-list-holder-left-top">
+                            <h5>{item.user}</h5>
+                            <p><b>{item.mobile}</b></p>
+                            <p>Reservation Token: <i>{item.reservation_token}</i></p>
+                        </div>
+                        <div className="reservations-list-holder-left-bottom">
+                            <p>Order : <i>{item.order_id}</i></p>
+                            <p>Processed: <b>{`${item.processed}`}</b></p>
+                        </div>
+                    </div>
+                    <div className="reservations-list-holder-right">
+                        {!item.processed ? (<>
+                            <button className="reservations-list-holder-right-process-btn" onClick={() => handleProcessBill(item.order_id)}>Process</button>
+
+                        </>):(<>
+                            <button disabled className="reservations-list-holder-right-process-btn">Process</button>
+
+                        </>)}
+                    </div>
+                </div>
+
+            </>)
+        })
+
 
         return(
             <>
-                <form onSubmit={handleGenerateBill}>
-                    <input type='text' name="ref_no" autoFocus value={refVal} onChange={(e) => setRefVal(e.target.value)} placeholder="Enter the reservation token ..."/>
-                    <input type="submit" name="bill" value='Get Bill'/>
-                </form>
-                {showBill?(<><div id="printDiv">
-                    <div id="bill">
-                        <table>
-                            <tr><td>{generatedBill.bill_datetime}</td></tr>
-                             <th>
-                                <td>Table No:{generatedBill.table_no}</td>
-                                <td>Reservation Token:{generatedBill.reference_id}</td>
-                                </th>
-                                <tr><td>Items</td><td>Quanity</td></tr>
-                                {itemslist}  
-                        </table>
-                        <p>{generatedBill.price}</p>
-                    </div>
-                    </div><button  onClick={() => printDiv('printDiv')}>Print</button>
+            <div className="bill-dashboard">
+            <div className="bill-dashboard-form">
+                    <input type='text' name="ref_no" autoFocus value={refVal} onChange={(e) => setRefVal(e.target.value)} placeholder="Enter the Mobile Number to Search ..."/>
+            </div>
+            <div className="bill-dashboard-screen">
+
+            {!showBill?(<>
+                        {items.length!==0?(<>{items}</>):(<p>No items found...</p>)}
                     </>
                 ):(<p>Enter the correct reservation token ...</p>)}
+            </div>
+
+            </div>
+
             </>
         )
     }
@@ -354,20 +377,31 @@ function StaffDashboard(){
 
 
     return (
-        <div className="dashboard">
+
+        <>
+        {(staffAuthState.user !== null)?(<>
+
+            <div className="dashboard">
             <div className="dashboard-left">
-                <h4>Restaurant</h4>
-                <button onClick={handleShowMenu}>Available Menu</button>
-                <button onClick={handleTodaysOrder}>Today's Orders</button>
-                <button onClick={handleGetBill}>Generate Bill</button>
-                <button onClick={handleLogout}>Logout</button>
+                <h4>{staffAuthState.staff_of_restaurant}</h4>
+                <button onClick={() => handleShowMenu()}>Available Menu</button>
+                <button onClick={() => handleTodaysOrder()}>Today's Orders</button>
+                <button onClick={() => handleGetBill()}>Process Bill</button>
+                <button onClick={() => handleLogout()}>Logout</button>
             </div>
             <div className="dashboard-right">
                 <div className="dashboard-right-container">
-                {show == 'menu'?(<UpdateAvailableMenu foodData={foodData}/>):(chooseDisplay(show))}
+                {show == 'menu'?(<UpdateAvailableMenu/>):(chooseDisplay(show))}
                 </div>
             </div>
         </div>
+
+        </>):(<>
+            <p>The Page Does Not Exists...</p>
+        </>)}
+        </>
+
+
     )
 
 }

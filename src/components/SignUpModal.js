@@ -2,13 +2,16 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import CSRFToken from "./CSRFToken";
 import { MessageContext } from "../contexts/Context.js";
+import { register } from "../store/action/action.js";
 import * as Data from './Data.js'
-
+import { GlobalContext } from "../store/index.js";
+import { useToast } from "../hooks/useToast.js";
 function SignUpModal({setLOS}){
 
     const [signUpData, setSignUpData] = useState({mobile:"", fullname:"",email:"",password:""})
     const [passwd2, setPasswd2] = useState("")
-    const {msg, setMsg} = useContext(MessageContext)
+    const {registerDispatch} = useContext(GlobalContext)
+    const toast = useToast()
     
     function closeModal(){
         document.querySelector(".modalBackground").style.visibility = "hidden"
@@ -22,13 +25,15 @@ function SignUpModal({setLOS}){
     }
 
     const handleSubmit = (e) => {
-        const URL = "http://localhost:8001/api/register"
         e.preventDefault();
 
         if(passwd2 == signUpData.password){
 
+            console.log(signUpData)
+            const registerAction = register(registerDispatch, toast);
+            registerAction(signUpData)
 
-            const userExist = Data.RestaurantUser.filter((item) => {
+            /*const userExist = Data.RestaurantUser.filter((item) => {
                 if(item.mobile == signUpData.mobile){
                     return true
                 }else{
@@ -52,7 +57,7 @@ function SignUpModal({setLOS}){
                 });
             }
 
-            console.log(Data.RestaurantUser)
+            console.log(Data.RestaurantUser)*/
 
 
             /*(async () => {

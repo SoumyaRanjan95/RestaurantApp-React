@@ -6,14 +6,20 @@ import {authenticateUserThunk} from '../redux_app/features/authenticate/authetic
 import { useSelector } from "react-redux";
 import CSRFToken from "./CSRFToken";
 import * as Data from './Data'
+import { GlobalContext } from "../store";
+import Cookies from "js-cookie";
+import { login } from "../store/action/action";
+import {useToast} from '../hooks/useToast'
 
 function UserLoginModal({setLOS}){
 
     const [inputValue, setInputValue] = useState({mobile:"",password:""})
     const [failedMsg, setFailedMsg] = useState("")
-    const {user, setUser} = useContext(UserContext)
+    const {authState,authDispatch} =useContext(GlobalContext)
 
-    const dispatch = useDispatch()
+    const toast = useToast()
+
+    //const dispatch = useDispatch()
 
     /*useEffect(() => {
         //fetchData();
@@ -29,65 +35,13 @@ function UserLoginModal({setLOS}){
         setInputValue({...inputValue,[name]: value})
     }
 
-    /*async function fetchData(){
-
-          try{
-
-            const URL = "http://localhost:8001/api/auth/"
-            let response = await fetch(URL,{
-                method: 'POST',
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(inputValue)
-              });
-    
-              let data = await response.json();
-              console.log(data)
-              //setUser({...user,user:data["data"]["username"], isLogged: true, reservations:data["data"]["reservations"]})
-              console.log(user)
-              closeModal();
-
-          }catch{
-            setInputValue({...inputValue,mobile:"",password:""})
-            setUser({...user,user:"", isLogged: false, reservations:[]})
-
-
-          }
-    }*/
-
+   
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const loginAction = login(authDispatch, toast)
+        await loginAction(inputValue)
 
-        let userlogin = Data.RestaurantUser.filter((item) => {
-            if(item.mobile == inputValue.mobile && item.password === inputValue.password){
-                return true
-            }else{
-                return false
-            }
-        });
-
-        if(userlogin.length === 0){
-            alert('Login failed')
-        }else{
-
-            setUser({...user,
-                mobile:userlogin[0].mobile,
-                email:userlogin[0].email,
-                fullname:userlogin[0].fullname,
-                is_authenticated: !userlogin[0].is_authenticated,
-            })   
-        }
-
-
-        console.log(user)
-
-
-        /*dispatch(authenticateUserThunk(inputValue))
-        .then(res => console.log(res.payload.data))*/
-        //fetchData();
         setInputValue({...inputValue,mobile:"",password:""})
         closeModal();
 
@@ -105,7 +59,6 @@ function UserLoginModal({setLOS}){
                 <form onSubmit={handleSubmit} className="LoginModal-mid">
                     <input type="text" name="mobile" value={inputValue.mobile} onChange={handleChange} placeholder="Enter you Number"></input>
                     <input type="password" name="password" value={inputValue.password} onChange={handleChange} placeholder="Enter Password" required></input>
-                    {failedMsg==""?(<></>):(<p style={{'color':'red'}}>{failedMsg}</p>)}
                     <input type="submit" value="Submit"/>
                 </form>
 

@@ -1,10 +1,16 @@
 import {useContext, useEffect, useState} from 'react';
 import * as Data from './Data'
-function DropDown({resturant, setResturant, rId,setRId}){
+import { restaurantlist,setrestaurantdata } from '../store/action/action';
+import { GlobalContext } from '../store';
+import { type } from '@testing-library/user-event/dist/type';
+function DropDown({restaurant, rId}){
 
     const [filterText, setFilterText] = useState("") 
-    const [lists, setLists] = useState(Data.Restaurants)
-    
+    const {listRestaurantState ,listRestaurantDispatch} =useContext(GlobalContext)
+    const {restaurantDataState ,restaurantDataDispatch} =useContext(GlobalContext)
+    const [lists, setLists] = useState(listRestaurantState.restaurantlist)
+
+
     /*const lists= [
         {city:  "Banglore", restaurant: ["IndiraNagar","Lido Mall","IndiraNagar","IndiraNagar","IndiraNagar"]},
         {city:  "Mumbai", restaurant: ["IndiraNagar", "Ido","IndiraNagar","IndiraNagar","IndiraNagar"]},
@@ -14,18 +20,10 @@ function DropDown({resturant, setResturant, rId,setRId}){
         {city:  "GuruGram", restaurant: ["IndiraNagar", "IndiraNagar","IndiraNagar","IndiraNagar","IndiraNagar"]},
     
     ]*/
-    /*useEffect(() => {
-        const URL = "http://localhost:8001/api/locations/"
-        fetch(URL).then(res => res.json()).then(data => {                 
-             setLists(data);
-     
-     
-         });
-    },[]);*/
 
 
 
-
+console.log(restaurantDataState)
 
 
 
@@ -54,18 +52,23 @@ function DropDown({resturant, setResturant, rId,setRId}){
 
 
         const handleSetRestaurant = (item) => {
-            setResturant(item.name)
-            setRId(item.id)
+
+            restaurantDataDispatch({type:'SET_RESTAURANT',payload: item.restaurant})
+            restaurantDataDispatch({type:'SET_RESTAURANT_ID', payload: item.id})
+
+            const restaurantdataAction = setrestaurantdata(restaurantDataDispatch)
+            restaurantdataAction(item.id)
+            
         }
 
         let filtered = lists.filter((item) => {
-            if(item.name.toLowerCase().includes(filterText.toLowerCase()) || item.city.toLowerCase().includes(filterText.toLowerCase())){
+            if(item.restaurant.toLowerCase().includes(filterText.toLowerCase()) || item.city.toLowerCase().includes(filterText.toLowerCase())){
                 return item
             }
         })
 
         let items = filtered.map((item) => {
-            return <a onClick={()=> handleSetRestaurant(item)}><p className='resturants'>{item.name}</p></a>
+            return <a onClick={()=> handleSetRestaurant(item)}><p className='resturants'>{item.restaurant}</p></a>
         })
 
         /*function CityResturantHolder({items}){
@@ -92,8 +95,7 @@ function DropDown({resturant, setResturant, rId,setRId}){
             <DropDownList
                 lists={lists}
                 filterText={filterText}
-                resturant = {resturant}
-                setResturant={setResturant}
+                restaurant = {restaurant}
             />
         </div>
         </>

@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import {React, useState} from "react"
+import {React, useContext, useEffect, useState} from "react"
 import './App.css';
 import {BrowserRouter,Routes, Route, Router, Outlet,Link} from "react-router-dom";
 import BreadCrumb from "./components/Breadcrumb";
@@ -8,13 +8,18 @@ import UserLogin from "./components/UserLogin"
 import Footer from "./components/Footer"
 import Cart from "./components/Cart"
 import Logout from "./components/Logout"
-import Message from './components/Message';
 //import MyContext from './contexts/Context';
 import {ResturantContext,UserContext, MessageContext} from './contexts/Context';
 import { useDispatch, useSelector } from 'react-redux';
+import { GlobalContext } from './store';
+import { restaurantlist } from './store/action/action';
+import { useToast } from './hooks/useToast';
+import Toast from './components/Toast';
 
 
-function NavBar({user}){
+function NavBar({state}){
+
+  
 
 
 
@@ -26,7 +31,7 @@ function NavBar({user}){
 
       </div>
       <div className='navright'>
-        {(user.is_authenticated==false)?(<UserLogin/>):(<Logout/>)}
+        {(state.mobile==null)?(<UserLogin/>):(<Logout/>)}
         <Cart/>
         <Search/>
         <BreadCrumb/>
@@ -42,39 +47,45 @@ function NavBar({user}){
 
 function App() {
 
-  const [resturant, setResturant] = useState('')
-  const [rId, setRId] = useState()
-  const [msg,setMsg] = useState({
-    message: '',
-    alertStatus: false,
-  })
+  const {authState,authDispatch} =useContext(GlobalContext)
+  const {listRestaurantState,listRestaurantDispatch} =useContext(GlobalContext)
 
-  const [user, setUser] = useState({
-    mobile:'', //unique
-    email:'',
-    fullname:'',
-    is_authenticated: false,
-    reservations:[],
-  });
-
-  const [restaurantMenu, setRestaurantMenu] = useState([])
-
+  const toast = useToast()
 
   
 
 
+
+  const [restaurantMenu, setRestaurantMenu] = useState([])
+  const globalData = useContext(GlobalContext)
+  console.log(globalData)
+
+
+  async function fetchData(){
+
+    try{
+
+      const URL = "http://localhost:8001/api/csrf/"
+      const response = await fetch(URL, {
+        credentials: 'include',
+      });
+
+        let data = await response.json();
+      console.log(data)
+    }catch(err){
+      console.log(err)
+    }
+}
+  useEffect(() => {
+    fetchData();
+    const getRestaurantListAction = restaurantlist(listRestaurantDispatch)
+    getRestaurantListAction()
+  },[])
+
   return (
     <>
-    <UserContext.Provider value = {{user, setUser}}>
-      <MessageContext.Provider value={{msg,setMsg}}>
-      <Message/>
-      <ResturantContext.Provider value = {{resturant, setResturant,rId, setRId,restaurantMenu, setRestaurantMenu}}>
-      <NavBar user={user}/>
-      <Outlet context={[resturant, setResturant, rId, setRId]}/>
-      </ResturantContext.Provider>
-      </MessageContext.Provider>
-
-    </UserContext.Provider>
+    <NavBar state={authState}/>
+    <Outlet/>
     <Footer/>
     </>
   );

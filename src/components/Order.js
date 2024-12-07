@@ -1,27 +1,37 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as Data from "./Data";
 import { useOutletContext } from "react-router-dom";
 import generateString from "../utils/utils";
-
+import { GlobalContext } from "../store";
+import { order } from "../store/action/action";
+import {openModal} from "./UserLogin";
+import { useToast } from "../hooks/useToast";
 function Order(){
 
-    const [resturant, setResturant, rId, setRId] = useOutletContext()
+    const{restaurantDataState,restaurantDataDispatch}= useContext(GlobalContext)
+    const{authState,authDispatch}=useContext(GlobalContext)
     const [tableNo, setTableNo] = useState('');
     const [reservationToken, setReservationToken] = useState('');
+    const toast = useToast()
 
-    const RestMenu = Data.Menu.filter((item)=>{
+    /*const RestMenu = Data.Menu.filter((item)=>{
         if(item.restaurant_id === rId){
             return true
         }else{
             return false
         }
-    })
+    })*/
 
-    const[foodData, setFoodData] = useState(RestMenu)
-    const [checkState, setCheckState] = useState(new Array(foodData.length).fill(false))
-    const [checkQuantity, setCheckQuantity] = useState(new Array(foodData.length).fill(0))
+    console.log(restaurantDataState)
+    const fillFalse = new Array(restaurantDataState.menu.length).fill(false)
+    const fillZero = new Array(restaurantDataState.menu.length).fill(0)
+    const [checkState, setCheckState] = useState(fillFalse)
+    const [checkQuantity, setCheckQuantity] = useState(fillZero)
     const [price, setPrice] = useState(0)
-
+console.log(fillFalse)
+console.log(fillZero)
+console.log(checkState)
+console.log(checkQuantity)
 
     const [itemList, setItemList] = useState([])
 
@@ -39,13 +49,13 @@ function Order(){
     useEffect(() =>{
         const totalPrice = checkState.reduce((acc, state, index) =>{
             if(state == true){
-                return acc + (foodData[index].price * checkQuantity[index])
+                return acc + (restaurantDataState.menu[index].price * checkQuantity[index])
             }
             return acc
         }, 0);
 
         setPrice(totalPrice)
-    }, [checkState, checkQuantity])
+    }, [checkState, checkQuantity,restaurantDataState])
 
 
     const handleCheckChange = (position,itm) => {
@@ -88,14 +98,10 @@ function Order(){
         ])*/
 
         const itemdat =  {
-            order_id: null, 
-            from_restaurant:rId,
-            item:itm.name,
-            type: itm.type,
-            vegOrNonVeg:itm.vegOrNonVeg, 
-            price: itm.price,
+            from_restaurant:restaurantDataState.id,
+            menu_id: itm.id, //set this
             quantity:updatedQuantity[position],
-            net_price: (itm.price*updatedQuantity[position]), //Restuarnat.Menu.price
+            item_cancelled: false, //Restuarnat.Menu.price
         }
         setItemList( // Replace the state
             [ // with a new array
@@ -108,49 +114,42 @@ function Order(){
         e.preventDefault();
 
 
-        const hasReservation = Data.Reservations.filter((item) =>{
+        /*const hasReservation = Data.Reservations.filter((item) =>{
             if(item.reservation_token === reservationToken){
                 return true
             }
-        })
+        })*/
 
-        if(hasReservation.length !== 0){
-            const orderId = generateString(15);
-            const order = {
-                order_id: orderId,
-                order_datetime: new Date().toUTCString(),
-                from_restaurant: rId,
+        if(authState.mobile !== null){
+            const orders = {
+                from_restaurant: restaurantDataState.id,
                 reservation_token: reservationToken,
-                tableNo: tableNo,
+                table_no: tableNo,
                 processed:false,
-                menu_items:[]
+                items_ordered:[]
             }
             if(itemList.length !== 0){
-                const fltr = itemList.forEach((item) => {
-                    if(item.order_id === null ){
-                        item.order_id = orderId
-                    }
-                })
-                setItemList(fltr)
-                Data.ItemsOrdered.push(itemList)
-                order['menu_items'] = itemList
-                Data.orderData.push(order)
 
+                orders['items_ordered'] = itemList
 
-                console.log(order)
-                console.log(JSON.stringify(order))
+                console.log(orders)
+                //console.log(JSON.stringify(order))
+
+                const orderAction = order(toast)
+                orderAction(orders)
 
             }else{
-                alert('You didnt enter items')
+                toast.warning('You didnt enter items')
             }
 
         }else{
-            alert("You Dont have reservations")
+            toast.error("You are not logged in..")
+            openModal()
         }
         setTableNo('')
         setReservationToken('')
-        setCheckState(new Array(foodData.length).fill(false))
-        setCheckQuantity(new Array(foodData.length).fill(0))
+        setCheckState(new Array(restaurantDataState.menu.length).fill(false))
+        setCheckQuantity(new Array(restaurantDataState.menu.length).fill(0))
         setItemList([])
 
     }
@@ -211,9 +210,9 @@ function Order(){
         )
     }
 
-    function ItemContainer({type,foodData}){
-        const filtered = foodData.map((item) => {
-            let position=findPostion(foodData,item.id)
+    function ItemContainer({type}){
+        const filtered = restaurantDataState.menu.map((item) => {
+            let position=findPostion(restaurantDataState.menu,item.id)
             if(item.type === type){
                 return <MenuElem item={item} position={position} id={item.id} name={item.name} price={item.price} vegOrNonVeg={item.vegOrNonVeg} info={item.info} available={item.available}/>
             }
@@ -239,29 +238,27 @@ function Order(){
 
     return(<>
 
-        {resturant !== ''?(
+        {restaurantDataState.restaurant !== null?(
             <div className="menu">
             <header className="menu-header">
-                <h4> Our Restaurant Menu : {resturant}</h4>
-                <hr/>
+                <h4> Our Restaurant Menu : {restaurantDataState.restaurant}</h4>
             </header>
                 <form onSubmit={handleOrderSubmit}>
                 <input  required className='placeorder-form' name="reservation_token" type="text" value={reservationToken} onChange={(e) => setReservationToken(e.target.value)} placeholder="Enter reservation Token..."/>
                 <input  required className='placeorder-form' name="table_no" type="text" value={tableNo} onChange={(e) => setTableNo(e.target.value)} placeholder="Enter table id..."/>
                 <div className="menu-body">
                             <div className="container">
-                                <ItemContainer type='starters' foodData={foodData}/>
+                                <ItemContainer type='starter'/>
                             </div>
 
                             <div className="container">
-                                <ItemContainer type='bread' foodData={foodData}/>
+                                <ItemContainer type='bread'/>
                             </div>
 
                             <div className="container">
-                                <ItemContainer type='biryani' foodData={foodData}/>
+                                <ItemContainer type='biriyani'/>
                             </div>
                 </div>
-            <hr/>
 
             <footer className="menu-footer">
                 <div className="menu-footer-right">
@@ -276,7 +273,7 @@ function Order(){
             </form>
 
         </div>
-        ):(<div style={{'padding-top':'200px','justify-items':"center",'text-align':'center'}}><p>Please Select a Restaurant ...</p></div>)}
+        ):(<div style={{'background-color':'whitesmoke','padding-top':'200px','justify-items':"center",'text-align':'center'}}><p>Please Select a Restaurant ...</p></div>)}
         </>
     )
 }

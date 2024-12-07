@@ -2,27 +2,28 @@ import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { UserContext } from "../contexts/Context";
 import SidePanel from "./SidePanel";
-import Reservations from "./Reservations";
 import * as Data from './Data'
+import { GlobalContext } from "../store";
+import { myreservations } from "../store/action/action";
+import Reservations from "./Reservations"
 
 function Cart(){
-    const {user, setUser} = useContext(UserContext)
+    const {authState,authDispatch} = useContext(GlobalContext)
+    const {reservationDataState,reservationDataDispatch} = useContext(GlobalContext)
     function toggleShow(){
         document.querySelector(".reservations-background").style.visibility = "visible";
-        const reservationlist = Data.Reservations.filter(item =>{
-            if(user.mobile === item.mobile){
-                return true
-            }
-        })
-        setUser({...user, reservations:reservationlist})
-      }//shopping_cart
+        const reservationsAction = myreservations(reservationDataDispatch)
+        reservationsAction();
+    }
+
+
 
     return(
         <>
         <div className="cart maticon">
             <i onClick={toggleShow} class="material-icons">event_seat</i>
         </div>
-        <Reservations user={user}/>
+        <Reservations reservationslist = {reservationDataState.myreservations} reserveationdispatch={reservationDataDispatch}/>
         </>
 
     );

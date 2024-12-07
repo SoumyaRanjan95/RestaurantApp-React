@@ -1,19 +1,22 @@
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState , useEffect} from "react";
 import { UserContext } from "../contexts/Context";
 import { useDispatch } from "react-redux";
-//import staffauthenticateThunk from '../redux_app/features/staffauthenticate/staffauthenticateSlice'
-import staffauthenticateThunk from '../redux_app/features/authenticate/autheticateSlice'
-
+import { stafflogin } from "../store/action/action";
 import { useSelector } from "react-redux";
+import {GlobalContext} from '../store'
+import { useToast } from "../hooks/useToast";
 
 function Staff(){
 
     const [inputValue, setInputValue] = useState({mobile:"",password:""})
     const [failedMsg, setFailedMsg] = useState("")
-    const {user, setUser} = useContext(UserContext)
+    const {staffAuthState,staffAuthDispatch} = useContext(GlobalContext)
+    const toast = useToast()
 
     const dispatch = useDispatch()
+
+    const navigate = useNavigate()
 
 
     const handleChange = (e) => {
@@ -24,29 +27,12 @@ function Staff(){
 
     const handleSubmit = async (e) => {
 
-        const URL = "http://localhost:8001/staff/"
         e.preventDefault();
+        const staffloginAction = stafflogin(staffAuthDispatch, toast);
+        staffloginAction(inputValue)
 
-            /*(async () => {
-                console.log()
-                const rawResponse = await fetch(URL, {
-                  method: 'POST',
-                  headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(inputValue)
-                });
-                const content = await rawResponse.json();
-              
-                console.log(content);
-              })();*/
-        
-
-        //dispatch(staffauthenticateThunk(inputValue));
-        //dispatch({type: 'dsds/dsd'})
-        //fetchData();
-        setInputValue({...inputValue,mobile:"",password:""})
+        setInputValue({...staffAuthDispatch,mobile:"",password:""});
+        navigate("dashboard/")
 
 
     }

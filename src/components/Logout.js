@@ -2,21 +2,20 @@ import { useContext } from "react";
 import { UserContext } from "../contexts/Context";
 import { useDispatch } from "react-redux";
 import { logoutUserThunk } from "../redux_app/features/authenticate/autheticateSlice";
+import { GlobalContext } from "../store";
+import { logout } from "../store/action/action";
+import { useToast } from "../hooks/useToast";
 
 function Logout(){
 
-    const {user, setUser} = useContext(UserContext)
-    const dispatch = useDispatch()
+    const {authState,authDispatch} =useContext(GlobalContext)
+    const toast = useToast()
+
 
     const handleLogout = () => {
         //dispatch(logoutUserThunk({})) 
-        setUser({...user,
-            mobile:'', //unique
-            email:'',
-            fullname:'',
-            is_authenticated: false,
-            reservations:[],
-          })
+        const logoutAction = logout(authDispatch, toast);
+        logoutAction()
 
     }
 

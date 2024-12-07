@@ -3,13 +3,14 @@ import { useState } from "react"
 import UserLoginModal from "./UserLoginModal"
 import SignUpModal from "./SignUpModal"
 import SignInSignUpModalbckgrnd from "./SignInSignUpModalbckgrnd"
+export function openModal(){
+  //setIsVisible("visible")
+  document.querySelector(".modalBackground").style.visibility = "visible"    
+}
 function UserLogin(){
 
 
-  function openModal(){
-    //setIsVisible("visible")
-    document.querySelector(".modalBackground").style.visibility = "visible"    
-  }
+
 
     return (
       <>

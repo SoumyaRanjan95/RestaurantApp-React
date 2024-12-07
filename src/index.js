@@ -11,33 +11,38 @@ import Reservations from './components/Reservations';
 import Menu from './components/Menu';
 import Staff from './components/Staff';
 import StaffDashboard from './components/StaffDashboard';
-
+import GlobalProvider from './store/index';
 import { Provider } from 'react-redux';
 import store from './redux_app/store';
 import Order from './components/Order';
-
+import Toast from './components/Toast';
+import { useToast } from './contexts/ToastContext';
+import { ToastContextProvider } from './contexts/ToastContext';
+import ToastCheck from './components/ToastCheck';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
+    element:<App/>,
     children:[
       {
         path: "/",
         element: <Home/>,
       },
       {
-        path: "order",
+        path: "order/",
         element:<Order/>
       }
 
     ],
   },
   {
-    path: '/staff',
+    path: '/staff/',
     element: <Outlet/>, // setting an outlet elements adds the children elemnt to the parent 
     children:[     
       {
@@ -45,19 +50,26 @@ const router = createBrowserRouter([
         element:<Staff/>,
       },
       {
-        path: "dashboard",
+        path: "dashboard/",
         element: <StaffDashboard/>,
       },
 
-
     ],
   }, 
+  {
+    path:'/toasts/',
+    element: <ToastCheck/>
+  }
 ])
 
 
 root.render(
   <Provider store={store}>
+    <GlobalProvider>
+      <ToastContextProvider>
     <RouterProvider router={router} />
+    </ToastContextProvider>
+    </GlobalProvider>
   </Provider>
 
 );
@@ -66,7 +78,7 @@ root.render(
 /*
 root.render(
   <React.StrictMode>
-    <Reservations/>
+    <Toast type='success' message='This was a successful operation ...'/>
   </React.StrictMode>
 );
 */

@@ -4,9 +4,17 @@ import { useContext, useState , useRef, useEffect} from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { reserveUserThunk } from "../redux_app/features//authenticate/autheticateSlice";
 import generateString from "../utils/utils";
+import { reservetable } from "../store/action/action";
+import { GlobalContext } from "../store";
+import { useToast } from "../hooks/useToast";
 function ReserveTable(){
 
     const [isDisabled,setDisabled] = useState()
+    const {reservationDataState,reservationDataDispatch}= useContext(GlobalContext)
+    const {authState,authDispatch}= useContext(GlobalContext)
+    const {restaurantDataState,restaurantDataDispatch} = useContext(GlobalContext)
+    const toast = useToast()
+
 
     let btn_id = 0;
 
@@ -19,8 +27,7 @@ function ReserveTable(){
         document.querySelector(".modalBackground").style.visibility = "visible"    
       }
 
-    const {resturant, setResturant, rId, setRId} = useContext(ResturantContext)
-    const {user, setUser} = useContext(UserContext)
+
 
     //const user = useSelector(state => state.authenticate)
 
@@ -32,23 +39,16 @@ function ReserveTable(){
 
     const [clicked, setClicked] = useState(false)
 
-    const dispatch = useDispatch()
 
-    const [reserveData, setReserveData] = useState({
-        mobile:'',
-        date: "",
-        slot:'',
-        restaurant_id: "",
-        guests:0,
-        token:'',
-    })
+    
+
 
     // program to generate random strings
 
 
     let dateData = []
     let Month = ["Jan", "Feb", "Mar", "Apr","May","Jun","Jul","Aug","Sept", "Oct", "Nov", "Dec"]
-    let timelist = ["12:00pm", "12:30pm", "01:00pm", "01:30pm", "02:00pm", "02:30pm", "03:00pm", "03:30pm", "06:00pm", "06:30pm", "07:00pm", "07:30pm","08:00pm","08:30pm","09:00pm"]
+    let timelist = ["12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30","18:00","18:30","19:00","19:30","20:00"]
 
     let dateobj = new Date()
     for(let i=0;i<=30;i++){
@@ -60,9 +60,8 @@ function ReserveTable(){
         if(guest <= 0){
             setGuest(0)
         }else{
-            setGuest(guest - 1)
+            setGuest(guest-1)
         }
-
     }
 
     function handleDate(e, item){
@@ -74,7 +73,6 @@ function ReserveTable(){
         document.getElementById(e.target.id).style.backgroundColor = "rgb(244, 197, 166)";
         document.getElementById(e.target.id).style.color = "white";
         setdateState(item.iso)
-        setReserveData({...reserveData,date: item.iso})
 
 
 
@@ -91,7 +89,7 @@ function ReserveTable(){
         document.getElementById(e.target.id).style.color = "white";
 
 
-        setReserveData({...reserveData, slot: time})
+        setslotState(time)
     }
 
     /*async function funcreserve(){
@@ -114,25 +112,27 @@ function ReserveTable(){
         }
     }*/
 
-    const handleReserve = async (user) => {
+    const handleReserve = () => {
 
-        function authStatus(user){
-            return user.is_authenticated
-        }
+        const reservation_data = {
+            date: dateState,
+            slot: slotState,
+            guests: guest,
+            reservation_at:restaurantDataState.id,
+        }   
 
-            console.log("User status",authStatus(user))
-            if(authStatus(user) == true){
-                setReserveData({...reserveData, guests: guest,mobile: user.mobile, restaurant_id: rId, token: generateString(15)})
-                console.log(reserveData)
-                //funcreserve();
-                //dispatch(reserveUserThunk(reserveData))
+        console.log("This is the reservation Data", reservation_data)
+           if(authState.mobile != null){
+                const reservationAction = reservetable(reservationDataDispatch, toast)
+                reservationAction(reservation_data)
                 handleReserverTableClose()
             }else{
+                toast.info('You are not Logged In')
                 handleReserverTableClose();
                 handleOpenLogin();
             }
 
-
+        
 
     }
 
@@ -154,7 +154,7 @@ function ReserveTable(){
                 </div>
 
                 <div className="reservetable-sidepanel-mid">
-                    <h4>Dining at {resturant}</h4>
+                    <h4>Dining at {restaurantDataState.restaurant}</h4>
                     <div className="reservetable-sidepanel-mid-dining">
                         <button><i class='material-icons'>widgets</i><p>Amenities</p></button>
                         <button><i class='material-icons'>menu_book</i><p>Menu</p></button>
@@ -188,11 +188,22 @@ function ReserveTable(){
                 </div>
 
                 <div className="reservetable-sidepanel-bottom">
-                    
-                    <div className="reservetable-sidepanel-bottom-reserveguest">
-                        <h4>Guests : {guest} </h4>
-                    </div>
-                    <button className="reserve-btn" onClick={()=> handleReserve(user)}>Reserve</button>
+                    {guest==0?(<>
+
+                        <div className="reservetable-sidepanel-bottom-reserveguest">
+                            <h4>Guests : {guest} </h4>
+                        </div>
+                        <button disabled className="reserve-btn-disabled" onClick={handleReserve}>Reserve</button>
+                        
+                    </>):(<>
+
+                        <div className="reservetable-sidepanel-bottom-reserveguest">
+                            <h4>Guests : {guest} </h4>
+                        </div>
+                        <button className="reserve-btn" onClick={() => handleReserve()}>Reserve</button>
+                        
+                    </>)}
+
 
 
                 </div>
