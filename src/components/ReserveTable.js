@@ -1,9 +1,7 @@
 import { click } from "@testing-library/user-event/dist/click"
-import {ResturantContext,UserContext} from "../contexts/Context"
 import { useContext, useState , useRef, useEffect} from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { reserveUserThunk } from "../redux_app/features//authenticate/autheticateSlice";
-import generateString from "../utils/utils";
 import { reservetable } from "../store/action/action";
 import { GlobalContext } from "../store";
 import { useToast } from "../hooks/useToast";
@@ -147,7 +145,7 @@ function ReserveTable(){
     return(
         <div className="reservetable-sidepanel-background">
 
-            <div className="reservetable-sidepanel">
+            <div className="reservetable-sidepanel col-4">
                 <div className="reservetable-sidepanel-top">
                     <h4>Reservation</h4>
                     <i onClick={handleReserverTableClose} id="reservetable-sidepanel-head-clsbtn">×</i>
@@ -156,15 +154,15 @@ function ReserveTable(){
                 <div className="reservetable-sidepanel-mid">
                     <h4>Dining at {restaurantDataState.restaurant}</h4>
                     <div className="reservetable-sidepanel-mid-dining">
-                        <button><i class='material-icons'>widgets</i><p>Amenities</p></button>
-                        <button><i class='material-icons'>menu_book</i><p>Menu</p></button>
+                        <button><i className='material-icons'>widgets</i><p>Amenities</p></button>
+                        <button><i className='material-icons'>menu_book</i><p>Menu</p></button>
                     </div>
                     <h4>Select Date</h4>
                     <div className="reservetable-sidepanel-mid-date">
 
                         {dateData.map((item) => {
                                 btn_id = btn_id + 1;
-                                return <button id={btn_id} onClick={(e) => handleDate(e, item)} >{item.month} <b>{item.day}</b></button>
+                                return <button key={btn_id} id={btn_id} onClick={(e) => handleDate(e, item)} >{item.month} <b>{item.day}</b></button>
                         })}
 
                     </div>
@@ -172,7 +170,7 @@ function ReserveTable(){
 
                     <div className="reservetable-sidepanel-mid-slot">
                     {timelist.map((time) => {
-                                return <button id={time} className="btn-slot" onClick={(e) => handleSlot(e,time)}>{time}</button>
+                                return <button key={time} id={time} className="btn-slot" onClick={(e) => handleSlot(e,time)}>{time}</button>
                         })}
                     </div>
 

@@ -13,16 +13,15 @@ function SidePanel(){
     return (
         <div className="sidepanel-background">
 
-            <div className="sidepanel">
+            <div className="sidepanel col-12">
 
                 <div className="sidepanel-head">
                     <h1>Logo</h1>
                     <a id="sidepanel-head-clsbtn" onClick={toggleClose}>×</a>
                 </div>
-                <hr/>
 
                 <div className="sidepanel-body">
-                    <div class="sidepanel-body-container">
+                    <div className="sidepanel-body-container">
                         <h3>Our Restaurant</h3>
                         <div className="sidepanel-body-options">
                             <p className="links">Home</p>
@@ -34,7 +33,7 @@ function SidePanel(){
                         </div>
                     </div>
 
-                    <div class="sidepanel-body-container">
+                    <div className="sidepanel-body-container">
                         <h3>About</h3>
                         <div className="sidepanel-body-options">
                             <p className="links">About Us</p>
@@ -45,7 +44,7 @@ function SidePanel(){
                         </div>
                     </div>
 
-                    <div class="sidepanel-body-container">
+                    <div className="sidepanel-body-container">
                         <h3>Others</h3>
                         <div className="sidepanel-body-options">
                             <p className="links">Contact Us</p>

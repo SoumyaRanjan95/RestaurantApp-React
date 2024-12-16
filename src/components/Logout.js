@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { UserContext } from "../contexts/Context";
 import { useDispatch } from "react-redux";
 import { logoutUserThunk } from "../redux_app/features/authenticate/autheticateSlice";
 import { GlobalContext } from "../store";

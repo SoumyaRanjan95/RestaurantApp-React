@@ -43,15 +43,15 @@ function Home(){
       },[]);
 
     return (
-      <div className='Home'>
-        <div className='search-resturants'>
+      <div className='Home col-12'>
+        <div className='search-resturants col-6'>
           <div ref={ref1} onClick={handleClick} className='search-resturant-dropdown'>
                 <div className='search-resturant-dropdown-left'>
                 <p>Select Restaurants</p>
                 {restaurantDataState.restaurant == null?(<h4>Select Restaurant</h4>):(<h4>{restaurantDataState.restaurant}</h4>)} 
                 </div>
                 <div className='search-resturant-dropdown-right'>
-                <i class="material-icons">keyboard_arrow_down</i>
+                <i className="material-icons">keyboard_arrow_down</i>
                 </div>
                 {isOpen1?(<div className='search-resturant-dropdown-searchbar'><DropDown restaurant={restaurantDataState.restaurant} rId={restaurantDataState.id} /></div>):(<></>)}
           </div>
@@ -59,24 +59,24 @@ function Home(){
           <ReserveTable/>
         </div>
   
-        <div className='services'>
-          <h2>Services we Provide</h2>
-             <div className='services-container'>
+        <div className='services col-12'>
+          <h2 className='col-12'>Services we Provide</h2>
+             <div className='services-container col-12'>
                 <img className='services-container-img' src=''/>
-                <div className='services-container-elem services-container-elem-end'>
-                  <h8 className='services-container-elem-tags'>OUR RESTAURANT</h8>
+                <div className='services-container-elem services-container-elem-end col-6'>
+                  <h4 className='services-container-elem-tags'>OUR RESTAURANT</h4>
                   <h2 className='services-container-elem-tags'> Dine Out With Us</h2>
-                  <button onClick={handleReserverTable} className='services-container-elem-tags'> Reserve Table <i class="material-icons">arrow_forward</i>
+                  <button onClick={handleReserverTable} className='services-container-elem-tags'> Reserve <i className="material-icons">arrow_forward</i>
                   </button>
   
                 </div>
              </div>
   
-             <div className='services-container'>
-                <div className='services-container-elem services-container-elem-start'>
-                  <h8 className='services-container-elem-tags'>OUR RESTAURANT</h8>
-                  <h2 className='services-container-elem-tags'> Catering By Our Restaurant</h2>
-                  <button className='services-container-elem-tags'> Send Enquiry <i class="material-icons">arrow_forward</i>
+             <div className='services-container col-12'>
+                <div className='services-container-elem services-container-elem-start col-6'>
+                  <h4 className='services-container-elem-tags'>OUR RESTAURANT</h4>
+                  <h2 className='services-container-elem-tags'> Catering By <br/> Our Restaurant</h2>
+                  <button className='services-container-elem-tags'>Enquiry <i className="material-icons">arrow_forward</i>
                   </button>
   
                 </div>

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import CSRFToken from "./CSRFToken";
-import { MessageContext } from "../contexts/Context.js";
 import { register } from "../store/action/action.js";
 import * as Data from './Data.js'
 import { GlobalContext } from "../store/index.js";
@@ -88,7 +87,7 @@ function SignUpModal({setLOS}){
     }
 
     return(
-        <div className="LoginModal">
+        <div className="LoginModal col-4">
             <div className="LoginModal-top">
                 <h5>Sign Up</h5>
                 <a onClick={closeModal}><i class="material-icons">close</i></a>

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import { useContext, useState , useEffect} from "react";
-import { UserContext } from "../contexts/Context";
+import { useContext, useState , useEffect, useRef} from "react";
 import { useDispatch } from "react-redux";
 import {authenticateUserThunk} from '../redux_app/features/authenticate/autheticateSlice'
 import { useSelector } from "react-redux";
@@ -14,7 +13,6 @@ import {useToast} from '../hooks/useToast'
 function UserLoginModal({setLOS}){
 
     const [inputValue, setInputValue] = useState({mobile:"",password:""})
-    const [failedMsg, setFailedMsg] = useState("")
     const {authState,authDispatch} =useContext(GlobalContext)
 
     const toast = useToast()
@@ -26,7 +24,7 @@ function UserLoginModal({setLOS}){
     }, []);*/
     
     function closeModal(){
-        document.querySelector(".modalBackground").style.visibility = "hidden"
+            document.querySelector(".modalBackground").style.visibility = "hidden"
     }
 
     const handleChange = (e) => {
@@ -49,10 +47,10 @@ function UserLoginModal({setLOS}){
     }
 
     return(
-        <div className="LoginModal">
+        <div className={`LoginModal col-4`}>
             <div className="LoginModal-top">
                 <h5>Login</h5>
-                <a onClick={closeModal}><i class="material-icons">close</i></a>
+                <a onClick={closeModal}><i className="material-icons">close</i></a>
             </div>
             <div className="LoginModal-mid">
                 <p>Mobile Number</p>

@@ -43,6 +43,10 @@ const initialStaffAuthState = {
 
 }
 
+const theme = {
+    theme: '',
+}
+
 
 export const GlobalContext = createContext(initialAuthState)
 

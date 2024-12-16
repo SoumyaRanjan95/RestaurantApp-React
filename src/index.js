@@ -14,14 +14,13 @@ import StaffDashboard from './components/StaffDashboard';
 import GlobalProvider from './store/index';
 import { Provider } from 'react-redux';
 import store from './redux_app/store';
-import Order from './components/Order';
+import OrderPage from './components/OrderPage';
 import Toast from './components/Toast';
 import { useToast } from './contexts/ToastContext';
 import { ToastContextProvider } from './contexts/ToastContext';
 import ToastCheck from './components/ToastCheck';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
 
 
 
@@ -36,7 +35,7 @@ const router = createBrowserRouter([
       },
       {
         path: "order/",
-        element:<Order/>
+        element:<OrderPage/>
       }
 
     ],
@@ -56,10 +55,6 @@ const router = createBrowserRouter([
 
     ],
   }, 
-  {
-    path:'/toasts/',
-    element: <ToastCheck/>
-  }
 ])
 
 

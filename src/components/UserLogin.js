@@ -15,7 +15,7 @@ function UserLogin(){
     return (
       <>
       <div  className="userLogin maticon">
-        <a onClick={openModal}><i class="material-icons">person</i></a>
+        <a onClick={openModal}><i className="material-icons">person</i></a>
       </div>
       <SignInSignUpModalbckgrnd/>
       </>

@@ -13,10 +13,10 @@ function BreadCrumb(){
 
   return (
     <>
-      <SidePanel/>
       <div className='maticon'id="breadcrumb">
-        <a  onClick={toggleShow}> <i class="material-icons">menu</i></a>
+        <a  onClick={() => toggleShow()}> <i className="material-icons">menu</i></a>
       </div>
+      <SidePanel/>
 
     </>
 

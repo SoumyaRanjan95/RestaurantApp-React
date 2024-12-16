@@ -87,7 +87,7 @@ function Toast({id, type,message}){
 
             </div>
             <div className='toast-body-bottom'>
-                <div className="toast-progress">
+                <div className={`toast-progress ${progressBarClass}`}>
                         <div ref={progressRef} className={`toast-progress-bar ${progressBarClass}`}></div>
                 </div>
             </div>

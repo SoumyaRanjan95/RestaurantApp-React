@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as Data from "./Data";
-import { ResturantContext } from "../contexts/Context";
 import { useOutletContext } from "react-router-dom";
 import React from "react";
 import { redirect } from "react-router-dom";

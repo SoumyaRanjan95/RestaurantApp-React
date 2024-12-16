@@ -68,7 +68,7 @@ console.log(restaurantDataState)
         })
 
         let items = filtered.map((item) => {
-            return <a onClick={()=> handleSetRestaurant(item)}><p className='resturants'>{item.restaurant}</p></a>
+            return <a key={item.id} onClick={()=> handleSetRestaurant(item)}><p className='resturants'>{item.restaurant}</p></a>
         })
 
         /*function CityResturantHolder({items}){

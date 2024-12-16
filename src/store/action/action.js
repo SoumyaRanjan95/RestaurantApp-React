@@ -7,14 +7,33 @@ import {
   import axios from "axios";
 import Cookies from "js-cookie";
 
-
+export const is_authenticated = (dispatch) => async () =>{
+  try{
+    const URL = `${process.env.REACT_APP_API_URL}/api/is_authenticated/`
+    const response  = await fetch(URL,{
+      method: 'GET',
+      withCredentials: true,
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Token ${localStorage.getItem('token')}`, 
+      },
+    });
+    const data = await response.json()
+    if(data.is_authenticated){
+      dispatch({type:"LOGIN_SUCCESS", payload: data})
+    }
+  }catch(error){
+    console.log(error)
+  }
+}
 
 export const login = (dispatch,toast) => async (credentials) => {
   try {
     dispatch({ type: 'LOGIN_REQUEST' });
 
     // Simulate an API call (replace with actual API call)
-    const URL = "http://localhost:8001/api/login/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/login/`
     const response = await fetch(URL,{
             method: 'POST',
             headers: {
@@ -51,7 +70,7 @@ export const register = (dispatch, toast) => async (signUpData) => {
     dispatch({ type: 'REGISTER_REQUEST' });
 
     // Simulate an API call (replace with actual API call)
-    const URL = "http://localhost:8001/api/register/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/register/`
     const response = await fetch(URL,{
             method: 'POST',
             headers: {
@@ -82,7 +101,7 @@ export const register = (dispatch, toast) => async (signUpData) => {
 export const logout = (dispatch, toast) => async () =>{
   
   try{
-    const URL = "http://localhost:8001/api/logout/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/logout/`
     await fetch(URL,{
       method: 'GET',
       withCredentials: true,
@@ -105,7 +124,7 @@ export const logout = (dispatch, toast) => async () =>{
 export const restaurantlist = (dispatch) => async () => {
 
   try{
-    const URL = "http://localhost:8001/api/restaurants/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/restaurants/`
     const response = await fetch(URL,{
       method: 'GET',
     });
@@ -125,7 +144,7 @@ export const restaurantlist = (dispatch) => async () => {
 export const setrestaurantdata = (dispatch) => async (id) => {
 
   try{
-    const URL = `http://localhost:8001/api/menu/${id}/`
+    const URL = `${process.env.REACT_APP_API_URL}/api/menu/${id}/`
     const response = await fetch(URL,{
       method: 'GET',
     });
@@ -140,7 +159,7 @@ export const setrestaurantdata = (dispatch) => async (id) => {
 
 export const order = (toast) => async (orders) =>{
   try{
-    const URL = "http://localhost:8001/api/orders/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/orders/`
     const response = await fetch(URL,{
       method: 'POST',
       withCredentials: true,
@@ -164,7 +183,7 @@ export const reservetable = (dispatch, toast) => async (reservationData) => {
 
   try{
     console.log(reservationData)
-    const URL = "http://localhost:8001/api/reservations/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/reservations/`
     const response = await fetch(URL,{
       method: 'POST',
       withCredentials: true,
@@ -190,7 +209,7 @@ export const reservetable = (dispatch, toast) => async (reservationData) => {
 export const myreservations = (dispatch) => async () =>{
 
   try{
-    const URL = `http://localhost:8001/api/reservations/`
+    const URL = `${process.env.REACT_APP_API_URL}/api/reservations/`
     const response = await fetch(URL,{
       method: 'GET',
       withCredentials: true,
@@ -212,7 +231,7 @@ export const deletereservations = (dispatch) => async (uuid) =>{
 
 
   try{
-    const URL = `http://localhost:8001/api/reservations/${uuid}/`
+    const URL = `${process.env.REACT_APP_API_URL}/api/reservations/${uuid}/`
     const response = await fetch(URL,{
       method: 'DELETE',
       withCredentials: true,
@@ -239,7 +258,7 @@ export const deletereservations = (dispatch) => async (uuid) =>{
 export const stafflogin = (dispatch, toast) => async (credentials) => {
   try {
 
-    const URL = "http://localhost:8001/api/staff_login/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/staff_login/`
     const response = await fetch(URL,{
             method: 'POST',
             headers: {
@@ -268,10 +287,34 @@ export const stafflogin = (dispatch, toast) => async (credentials) => {
 };
 
 
+export const staff_is_authenticated = (dispatch) => async () =>{
+  try{
+    const URL = `${process.env.REACT_APP_API_URL}/api/staff_is_authenticated/`
+    const response  = await fetch(URL,{
+      method: 'GET',
+      withCredentials: true,
+      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Token ${localStorage.getItem('token')}`, 
+      },
+    });
+    const data = await response.json()
+    if(data.is_authenticated){
+      dispatch({type:"STAFF_AUTH_LOGIN_SUCCESS", payload: data})
+    }
+    
+    console.log(data)
+  }catch(error){
+    console.log(error)
+  }
+}
+
+
 export const stafflogout = (dispatch, toast) => async () =>{
   
   try{
-    const URL = "http://localhost:8001/api/logout/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/logout/`
     await fetch(URL,{
       method: 'GET',
       withCredentials: true,
@@ -294,7 +337,7 @@ export const stafflogout = (dispatch, toast) => async () =>{
 
 export const getrestaurantmenu = (dispatch) => async () => {
   try{
-    const URL = "http://localhost:8001/api/update/menu/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/update/menu/`
     const response = await fetch(URL,{
             method: 'GET',
             headers: {
@@ -320,7 +363,7 @@ export const getrestaurantmenu = (dispatch) => async () => {
 
 export const getrestaurantorders = (dispatch) => async () => {
   try{
-    const URL = "http://localhost:8001/api/process/orders/"
+    const URL = `${process.env.REACT_APP_API_URL}/api/process/orders/`
     const response = await fetch(URL,{
             method: 'GET',
             headers: {
@@ -347,7 +390,7 @@ export const getrestaurantorders = (dispatch) => async () => {
 export const processorders = (dispatch) => async (uuid) => {
 
   try{
-    const URL = `http://localhost:8001/api/process/orders/${uuid}/`
+    const URL = `${process.env.REACT_APP_API_URL}/api/process/orders/${uuid}/`
     const response = await fetch(URL,{
             method: 'PATCH',
             headers: {
@@ -373,7 +416,7 @@ export const processorders = (dispatch) => async (uuid) => {
 
 export const updaterestaurantmenu = (dispatch) => async (menulist) => {
   try{
-    const URL = `http://localhost:8001/api/update/menu/`
+    const URL = `${process.env.REACT_APP_API_URL}/api/update/menu/`
     const response = await fetch(URL,{
             method: 'PATCH',
             headers: {
@@ -400,7 +443,7 @@ export const updaterestaurantmenu = (dispatch) => async (menulist) => {
 export const getbill = async (dispatch) => {
 
   try{
-    const URL = `http://localhost:8001/api/bills_list/`
+    const URL = `${process.env.REACT_APP_API_URL}/api/bills_list/`
     const response = await fetch(URL,{
             method: 'GET',
             headers: {
@@ -427,7 +470,7 @@ export const getbill = async (dispatch) => {
 
 export const processbill = async (order_id) => {
   try{
-    const URL = `http://localhost:8001/api/process_bills/${order_id}/`
+    const URL = `${process.env.REACT_APP_API_URL}/api/process_bills/${order_id}/`
     const response = await fetch(URL,{
             method: 'PATCH',
             headers: {

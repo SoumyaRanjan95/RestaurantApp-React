@@ -49,14 +49,14 @@ function Reservations({reservationslist,reserveationdispatch}){
     return(
         <>
         <div className="reservations-background">
-            <div className="reservations">
+            <div className="reservations col-6">
                 <div className="reservations-head">
                     <h4>Our Restaurant</h4>
-                    <i onClick={handleReservationsClose} class='material-icons'>close</i>
+                    <i onClick={handleReservationsClose} className='material-icons'>close</i>
                 </div>
 
                     {((authState.mobile==null)||(reservationslist.length==0))?(<>
-                        <div className="reservations-body">
+                        <div className="reservations-body" style={{'display':"flex","flexDirection":"column","justifyContent":"center","alignItems":"center"}}>
                             No reservations
                         </div>
                     </>):(<>

@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import * as Data from "./Data";
 import { useOutletContext } from "react-router-dom";
-import generateString from "../utils/utils";
 import { GlobalContext } from "../store";
 import { order } from "../store/action/action";
 import {openModal} from "./UserLogin";
 import { useToast } from "../hooks/useToast";
+import { flushSync } from "react-dom";
 function Order(){
 
     const{restaurantDataState,restaurantDataDispatch}= useContext(GlobalContext)
@@ -14,6 +14,7 @@ function Order(){
     const [reservationToken, setReservationToken] = useState('');
     const toast = useToast()
 
+    console.log('Order-Component-rerendered')
     /*const RestMenu = Data.Menu.filter((item)=>{
         if(item.restaurant_id === rId){
             return true
@@ -25,6 +26,8 @@ function Order(){
     console.log(restaurantDataState)
     const fillFalse = new Array(restaurantDataState.menu.length).fill(false)
     const fillZero = new Array(restaurantDataState.menu.length).fill(0)
+
+    
     const [checkState, setCheckState] = useState(fillFalse)
     const [checkQuantity, setCheckQuantity] = useState(fillZero)
     const [price, setPrice] = useState(0)
@@ -33,9 +36,9 @@ console.log(fillZero)
 console.log(checkState)
 console.log(checkQuantity)
 
+
+
     const [itemList, setItemList] = useState([])
-
-
 
 
     function findPostion(foodData,id){
@@ -55,7 +58,8 @@ console.log(checkQuantity)
         }, 0);
 
         setPrice(totalPrice)
-    }, [checkState, checkQuantity,restaurantDataState])
+
+    }, [checkState, checkQuantity, restaurantDataState])
 
 
     const handleCheckChange = (position,itm) => {
@@ -239,13 +243,16 @@ console.log(checkQuantity)
     return(<>
 
         {restaurantDataState.restaurant !== null?(
-            <div className="menu">
+        <div className="menu col-12">
             <header className="menu-header">
-                <h4> Our Restaurant Menu : {restaurantDataState.restaurant}</h4>
+                <h4> {restaurantDataState.restaurant}</h4>
             </header>
                 <form onSubmit={handleOrderSubmit}>
-                <input  required className='placeorder-form' name="reservation_token" type="text" value={reservationToken} onChange={(e) => setReservationToken(e.target.value)} placeholder="Enter reservation Token..."/>
-                <input  required className='placeorder-form' name="table_no" type="text" value={tableNo} onChange={(e) => setTableNo(e.target.value)} placeholder="Enter table id..."/>
+                    <div className="form-input">
+                    <input  required className='placeorder-form' name="reservation_token" type="text" value={reservationToken} onChange={(e) => setReservationToken(e.target.value)} placeholder="Enter reservation Token..."/>
+                    <input  required className='placeorder-form' name="table_no" type="text" value={tableNo} onChange={(e) => setTableNo(e.target.value)} placeholder="Enter table No..."/>
+                    </div>
+
                 <div className="menu-body">
                             <div className="container">
                                 <ItemContainer type='starter'/>
@@ -273,7 +280,7 @@ console.log(checkQuantity)
             </form>
 
         </div>
-        ):(<div style={{'background-color':'whitesmoke','padding-top':'200px','justify-items':"center",'text-align':'center'}}><p>Please Select a Restaurant ...</p></div>)}
+        ):(<div className="col-12" style={{'height':'250px','backgroundColor':'var(--bg-color)','color':'var(--color-foreground)','paddingTop':'200px','justifyItems':"center",'textAlign':'center'}}><p style={{'fontSize':'19px','fontWeight':'800'}}>Please Select a Restaurant ...</p></div>)}
         </>
     )
 }

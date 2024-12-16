@@ -1,7 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState , useEffect} from "react";
-import { UserContext } from "../contexts/Context";
-import { useDispatch } from "react-redux";
 import { stafflogin } from "../store/action/action";
 import { useSelector } from "react-redux";
 import {GlobalContext} from '../store'
@@ -14,7 +12,6 @@ function Staff(){
     const {staffAuthState,staffAuthDispatch} = useContext(GlobalContext)
     const toast = useToast()
 
-    const dispatch = useDispatch()
 
     const navigate = useNavigate()
 
@@ -38,7 +35,9 @@ function Staff(){
     }
 
     return(
-        <div className="LoginModal">
+        <>
+        <Link to={'/'}>Home</Link>
+        <div className="LoginModal col-4">
             <div className="LoginModal-top">
                 <h5>Staff Login</h5>
             </div>
@@ -53,6 +52,9 @@ function Staff(){
             </div>
 
         </div>
+
+        </>
+
 
     );
 }

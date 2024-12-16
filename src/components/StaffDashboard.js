@@ -1,21 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Order from "./Order";
 import * as Data from "./Data";
-import { connect } from "react-redux";
 import  { Navigate, redirect, useNavigate } from 'react-router-dom'
 import { logout, stafflogout, processorders } from "../store/action/action";
 import { GlobalContext } from "../store";
 import { useContext } from "react";
 import {getrestaurantmenu,getrestaurantorders,updaterestaurantmenu, getbill, processbill} from '../store/action/action'
 import { useToast } from "../hooks/useToast";
+import { staff_is_authenticated } from "../store/action/action";
 
 function StaffDashboard(){
 
     const {staffAuthState,staffAuthDispatch} = useContext(GlobalContext)
         
     const navigate = useNavigate()
-
-
 
 
 
@@ -27,6 +25,14 @@ function StaffDashboard(){
     const [showBill, setShowBill] = useState(false)
     const [refVal, setRefVal] = useState('')
     const toast = useToast()
+
+    useEffect(() => {
+        const staff_auth_action = staff_is_authenticated(staffAuthDispatch)
+        staff_auth_action()
+    },[])
+
+
+
 
     const handleShowMenu = () => {
         setShow('menu')
@@ -376,14 +382,17 @@ function StaffDashboard(){
 
 
 
+
     return (
 
         <>
         {(staffAuthState.user !== null)?(<>
-
-            <div className="dashboard">
+        <div className="dashboard-top col-12">
+        <h4 className="staff_of_restaurant_top">{staffAuthState.staff_of_restaurant}</h4>
+            <p><b>{new Date().toDateString()}</b></p>
+        </div>
+            <div className="dashboard col-12">
             <div className="dashboard-left">
-                <h4>{staffAuthState.staff_of_restaurant}</h4>
                 <button onClick={() => handleShowMenu()}>Available Menu</button>
                 <button onClick={() => handleTodaysOrder()}>Today's Orders</button>
                 <button onClick={() => handleGetBill()}>Process Bill</button>
